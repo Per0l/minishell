@@ -1,4 +1,4 @@
-SRCS		= src/main.c src/str_utils.c src/mem_utils.c src/ft_split.c
+SRCS		= src/main.c
 
 OBJS		= ${SRCS:.c=.o}
 
@@ -6,7 +6,7 @@ NAME		= minishell
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -I ./libft/
 
 IS_BONUS = 0
 
@@ -16,12 +16,15 @@ IS_BONUS = 0
 all:		${NAME}
 
 ${NAME}:	${OBJS} 
-			${CC} ${CFLAGS} ${OBJS} -lreadline -o ${NAME}
+			make -C libft/
+			${CC} ${CFLAGS} ${OBJS} -L libft -lft -lreadline -o ${NAME}
 
 clean:
+			make clean -C libft/
 			rm -f ${OBJS}
 
 fclean:		clean
+			make fclean -C libft/
 			rm -f ${NAME}
 
 re:			fclean all

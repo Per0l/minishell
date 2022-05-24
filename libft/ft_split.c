@@ -3,32 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 15:12:21 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 16:53:40 by aperol-h         ###   ########.fr       */
+/*   Created: 2021/07/29 12:31:51 by aperol            #+#    #+#             */
+/*   Updated: 2021/07/30 16:39:08 by aperol           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <stdlib.h>
-#include "mem_utils.h"
-#include "str_utils.h"
 
-unsigned int	ft_strlcpy(char *dst, const char *src, size_t size)
+static void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
 {
-	size_t	srclen;
+	void	*new;
 
-	if (!dst || !src)
-		return (-1);
-	srclen = ft_strlen(src);
-	if (srclen + 1 < size)
-		ft_memmove(dst, src, srclen + 1);
-	else if (size != 0)
+	if (!ptr)
 	{
-		ft_memmove(dst, src, size - 1);
-		dst[size - 1] = '\0';
+		new = malloc(size);
+		if (!new)
+			return (NULL);
 	}
-	return (srclen);
+	else
+	{
+		if (ori_size < size)
+		{
+			new = malloc(size);
+			if (!new)
+				return (NULL);
+			ft_memcpy(new, ptr, ori_size);
+			free(ptr);
+		}
+		else
+			new = ptr;
+	}
+	return (new);
 }
 
 static size_t	get_str_arr_len(char **arr)

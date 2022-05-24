@@ -1,19 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_utils.h                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 14:27:13 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 16:54:13 by aperol-h         ###   ########.fr       */
+/*   Created: 2021/07/28 19:32:53 by aperol-h          #+#    #+#             */
+/*   Updated: 2021/07/29 20:55:36 by aperol           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STR_UTILS_H
-# define STR_UTILS_H
+#include <stdlib.h>
+#include "libft.h"
 
-size_t	ft_strlen(const char *s);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-void	*ft_memmove(void *dest, const void *src, size_t n);
-#endif
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*ptr;
+
+	if (nmemb == 0 || size == 0)
+	{
+		nmemb = 1;
+		size = 1;
+	}
+	ptr = malloc(nmemb * size);
+	if (ptr)
+		ft_bzero(ptr, nmemb * size);
+	return (ptr);
+}

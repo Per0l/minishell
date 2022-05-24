@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 17:12:25 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:12:24 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "str_utils.h"
+#include "libft.h"
+#include "minishell.h"
 
 #ifndef MAX_BUF
 # define MAX_BUF 200
@@ -84,10 +85,7 @@ int	main(void)
 		cmd = rl_gets(prompt);
 		if (!cmd)
 			break ;
-		if (ft_strncmp(cmd, "exit", 0) == 0)
-			break ;
-		if (ft_strlen(cmd) > 0)
-			printf("%s\n", cmd);
+		parse(cmd);
 	}
 	free(prompt);
 }

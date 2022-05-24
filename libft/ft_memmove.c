@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mem_utils.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 15:13:14 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 16:52:29 by aperol-h         ###   ########.fr       */
+/*   Created: 2021/07/28 17:56:48 by aperol-h          #+#    #+#             */
+/*   Updated: 2021/07/30 22:12:21 by aperol           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <stddef.h>
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	register const char	*firsts;
-	register char		*firstd;
-	register const char	*lasts;
-	register char		*lastd;
+	const char	*firsts;
+	char		*firstd;
+	const char	*lasts;
+	char		*lastd;
 
 	if (!dest && !src)
 		return (NULL);
@@ -36,30 +36,4 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 			*lastd-- = *lasts--;
 	}
 	return (dest);
-}
-
-void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
-{
-	void	*new;
-
-	if (!ptr)
-	{
-		new = malloc(size);
-		if (!new)
-			return (NULL);
-	}
-	else
-	{
-		if (ori_size < size)
-		{
-			new = malloc(size);
-			if (!new)
-				return (NULL);
-			ft_memmove(new, ptr, ori_size);
-			free(ptr);
-		}
-		else
-			new = ptr;
-	}
-	return (new);
 }

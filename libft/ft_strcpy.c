@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mem_utils.h                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 15:13:57 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 16:51:56 by aperol-h         ###   ########.fr       */
+/*   Created: 2021/07/28 19:37:07 by aperol-h          #+#    #+#             */
+/*   Updated: 2021/07/28 19:37:10 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MEM_UTILS_H
-# define MEM_UTILS_H
+char	*ft_strcpy(char *dest, char *src)
+{
+	int		i;
 
-void	*ft_memmove(void *dest, const void *src, size_t n);
-void	*ft_realloc(void *ptr, size_t ori_size, size_t size);
-#endif
+	i = 0;
+	while (src[i] != 0)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	if (src[i] == 0)
+		dest[i] = '\0';
+	return (dest);
+}
