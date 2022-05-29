@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/28 17:34:23 by aoteo-be         ###   ########.fr       */
+/*   Created: 2022/05/24 23:09:07 by aoteo-be          #+#    #+#             */
+/*   Updated: 2022/05/27 16:27:31 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	parse(char *cmd)
+void	builtin_pwd(void)
 {
-	printf("%s", cmd); // Para que tenga algo y poder compilar
+	char	*working_dir;
+
+	working_dir = malloc(MAX_BUF * sizeof(char));
+	if (!working_dir)
+		exit(1);
+	getcwd(working_dir, MAX_BUF);
+	printf("%s\n", working_dir);
+	free(working_dir);
 }
+

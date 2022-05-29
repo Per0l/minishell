@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/28 17:34:23 by aoteo-be         ###   ########.fr       */
+/*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
+/*   Updated: 2022/05/28 17:34:02 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	parse(char *cmd)
+void	builtin_unset(void)
 {
-	printf("%s", cmd); // Para que tenga algo y poder compilar
+	printf("\n"); // Para que tenga algo y poder compilar
 }
+

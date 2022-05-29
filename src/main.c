@@ -6,18 +6,11 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 19:12:24 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/28 18:02:36 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft.h"
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 #ifndef MAX_BUF
 # define MAX_BUF 200
