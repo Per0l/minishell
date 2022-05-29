@@ -6,17 +6,10 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/24 19:12:24 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/29 17:15:05 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft.h"
 #include "minishell.h"
 
 #ifndef MAX_BUF
@@ -85,7 +78,7 @@ int	main(void)
 		cmd = rl_gets(prompt);
 		if (!cmd)
 			break ;
-		parse(cmd);
+		parse(cmd, getenv("PATH"));
 	}
 	free(prompt);
 }

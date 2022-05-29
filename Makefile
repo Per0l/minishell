@@ -1,4 +1,4 @@
-SRCS		= src/main.c
+SRCS		= src/main.c src/parser.c src/path_find.c
 
 OBJS		= ${SRCS:.c=.o}
 
