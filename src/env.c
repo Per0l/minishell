@@ -9,14 +9,16 @@
 /*   Updated: 2022/05/28 17:35:05 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-// He añadido el parámetro envp que es el tercer parámetro de main, pero se podría usar también directamente __environ.
-// ¿Lo considerarína como una variable global al evaluar?
+
+// He añadido el parámetro envp que es el tercer parámetro de main, pero se
+// podría usar también directamente __environ. ¿Lo consideraran como una
+// variable global al evaluar? porque solo se puede usar una.
 
 #include "../includes/minishell.h"
 
 void	builtin_env(int fd, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i])

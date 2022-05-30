@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
+/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 23:09:07 by aoteo-be          #+#    #+#             */
 /*   Updated: 2022/05/27 16:27:31 by aoteo-be         ###   ########.fr       */
@@ -23,4 +23,3 @@ void	builtin_pwd(void)
 	printf("%s\n", working_dir);
 	free(working_dir);
 }
-

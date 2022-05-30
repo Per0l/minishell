@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/28 17:59:41 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/05/30 19:01:14 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <dirent.h>
+# include <fcntl.h>
 # include "libft.h"
 # include "minishell.h"
 # include <readline/readline.h>
@@ -33,6 +35,7 @@ void	builtin_exit(void);
 void	builtin_export(char *var);
 void	builtin_pwd(void);
 void	builtin_unset(void);
-void	parse(char *cmd);
+void	parse(char *cmd, char *path);
+char	*search_executable(char **path, char *cmd);
 
 #endif

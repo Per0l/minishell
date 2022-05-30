@@ -3,13 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
+/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 21:37:39 by aoteo-be          #+#    #+#             */
 /*   Updated: 2022/05/27 16:27:10 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-// He añadido el parámetro fd pensando en que se puede redireccionrr la salida a un fichero
+
+// He añadido el parámetro fd pensando en que se puede redireccionar la salida
+//  a un fichero
 
 #include "../includes/minishell.h"
 

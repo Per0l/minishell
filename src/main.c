@@ -6,15 +6,11 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/28 18:02:36 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/05/29 17:15:05 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-#ifndef MAX_BUF
-# define MAX_BUF 200
-#endif
+#include "minishell.h"
 
 char	*get_prompt(void)
 {
@@ -78,7 +74,7 @@ int	main(void)
 		cmd = rl_gets(prompt);
 		if (!cmd)
 			break ;
-		parse(cmd);
+		parse(cmd, getenv("PATH"));
 	}
 	free(prompt);
 }
