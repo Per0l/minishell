@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/29 17:15:05 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:37:39 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,19 @@ char	*get_prompt(void)
 	return (prompt);
 }
 
-char	*rl_gets(char *prompt)
+char	*rl_gets(void)
 {
 	static char	*line_read = (char *) NULL;
+	char		*prompt;
 
 	if (line_read)
 	{
 		free (line_read);
 		line_read = (char *) NULL;
 	}
+	prompt = get_prompt();
 	line_read = readline(prompt);
+	free(prompt);
 	if (line_read && *line_read)
 		add_history (line_read);
 	return (line_read);
@@ -56,29 +59,25 @@ char	*rl_gets(char *prompt)
 
 void	sigint_handler(int signum)
 {
-	char	*prompt;
-
 	if (signum == 2)
 	{
-		prompt = get_prompt();
-		printf("\n%s", prompt);
-		free(prompt);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
 int	main(void)
 {
-	char	*prompt;
 	char	*cmd;
 
 	signal(SIGINT, sigint_handler);
-	prompt = get_prompt();
 	while (1)
 	{
-		cmd = rl_gets(prompt);
+		cmd = rl_gets();
 		if (!cmd)
 			break ;
 		parse(cmd, getenv("PATH"));
 	}
-	free(prompt);
 }

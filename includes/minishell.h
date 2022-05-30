@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/29 18:04:14 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:10:45 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 # include "libft.h"
 
 void	parse(char *cmd, char *path);

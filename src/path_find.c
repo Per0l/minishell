@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/29 18:13:31 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:03:21 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,56 @@ char	*search_folder(char *folder, char *cmd)
 	return (res);
 }
 
+char	*file_error_handler(char *res, char *cmd_bck, char *is_path)
+{
+	struct stat	sb;
+	int			stat_e;
+
+	if (res == NULL && !is_path)
+	{
+		ft_putstr_fd("minishell: Command not found: ", 2);
+		ft_putendl_fd(cmd_bck, 2);
+		return (NULL);
+	}
+	stat_e = stat(res, &sb);
+	if (stat_e == -1 || (S_IEXEC & sb.st_mode) == 0)
+	{
+		if (stat_e != -1)
+			errno = EACCES;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(res, 2);
+		if (!is_path)
+			free(res);
+		return (NULL);
+	}
+	if (is_path)
+		res = ft_strdup(res);
+	return (res);
+}
+
 char	*search_executable(char **path, char *cmd)
 {
 	int		i;
 	char	*res;
+	char	*is_path;
+	char	*cmd_bck;
 
 	i = 0;
 	res = NULL;
-	if (ft_strchr(cmd, '/') && open(cmd, __O_PATH) != -1)
-		res = ft_strdup(cmd);
+	is_path = ft_strchr(cmd, '/');
 	while (path && path[i])
 	{
-		if (!res)
+		if (res == NULL && !is_path)
 			res = search_folder(path[i], cmd);
 		free(path[i]);
 		i++;
 	}
 	if (path)
 		free(path);
-	return (res);
+	cmd_bck = cmd;
+	if (!is_path)
+		cmd = res;
+	return (file_error_handler(cmd, cmd_bck, is_path));
 }
