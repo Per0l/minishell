@@ -6,11 +6,30 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/29 18:19:17 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:39:17 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	execve_fork(char *executable, char **args)
+{
+	pid_t		pid;
+	struct stat	sb;
+
+	stat(executable, &sb);
+	if (S_ISREG(sb.st_mode))
+	{
+		pid = fork();
+		if (pid == 0)
+			execve(executable, args, NULL);
+		else
+			waitpid(pid, NULL, 0);
+	}
+	else
+		chdir(executable);
+	free(executable);
+}
 
 void	parse(char *cmd, char *path)
 {
@@ -28,12 +47,7 @@ void	parse(char *cmd, char *path)
 		{
 			executable = search_executable(ft_split(path, ':'), args[i]);
 			if (executable)
-			{
-				printf("%s\n", executable);
-				free(executable);
-			}
-			else
-				printf("minishell: command not found: %s\n", args[i]);
+				execve_fork(executable, args);
 		}
 		free(args[i]);
 		i++;
