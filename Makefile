@@ -6,7 +6,7 @@
 #    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/06/03 18:32:11 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/06/03 18:42:14 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ all:		${NAME}
 
 
 ${NAME}:	${OBJS}
+			make -C libft/
 			make bonus -C libft/
 			${CC} ${CFLAGS} ${OBJS} -L libft -lft -lreadline -o ${NAME}
 
