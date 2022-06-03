@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/30 18:03:21 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:43:39 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_pathjoin(char *folder, char *file)
 	sfile = ft_strlen(file);
 	res = (char *)malloc((sfolder + sfile + 2) * sizeof(char));
 	if (!res)
-		return (NULL);
+		exit(1);
 	ft_memmove(res, folder, sfolder);
 	res[sfolder] = '/';
 	ft_memmove(res + sfolder + 1, file, sfile);

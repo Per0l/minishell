@@ -3,21 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 21:37:39 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/05/27 16:27:10 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:30:10 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // He añadido el parámetro fd pensando en que se puede redireccionar la salida
 //  a un fichero
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	builtin_echo(int fd, int has_n, char *str)
 {
-	write(fd, str, ft_strlen(str));
+	if (str)
+		write(fd, str, ft_strlen(str));
 	if (!has_n)
 		write(fd, "\n", 1);
+	free(str);
+}
+
+int	builtin_echo_parse(char **args)
+{
+	int	has_n;
+
+	has_n = 0;
+	if (args[1] && ft_strncmp(args[1], "-n", ft_strlen(args[1])) == 0)
+		has_n = 1;
+	if (args[1 + has_n])
+		builtin_echo(1, has_n, ft_strljoin(args + 1 + has_n));
+	else
+		builtin_echo(1, has_n, NULL);
+	return (1);
 }

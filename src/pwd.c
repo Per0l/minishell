@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 23:09:07 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/05/27 16:27:31 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:38:35 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-void	builtin_pwd(void)
+int	builtin_pwd(void)
 {
 	char	*working_dir;
 
@@ -22,4 +22,5 @@ void	builtin_pwd(void)
 	getcwd(working_dir, MAX_BUF);
 	printf("%s\n", working_dir);
 	free(working_dir);
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 11:40:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2021/07/30 16:37:29 by aperol           ###   ########.fr       */
+/*   Updated: 2022/06/03 17:34:20 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,33 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memmove(newstr + size1, s2, size2);
 	newstr[size1 + size2] = '\0';
 	return (newstr);
+}
+
+char	*ft_strljoin(char **list)
+{
+	size_t	i;
+	char	*res;
+	char	*temp;
+	char	*spaced;
+
+	i = 0;
+	res = NULL;
+	while (list && list[i])
+	{
+		if (res == NULL)
+			res = list[i];
+		else
+		{
+			spaced = ft_strjoin(res, " ");
+			temp = ft_strjoin(spaced, list[i]);
+			free(spaced);
+			if (i > 1)
+				free(res);
+			res = temp;
+		}
+		i++;
+	}
+	if (i == 1)
+		res = ft_strdup(res);
+	return (res);
 }

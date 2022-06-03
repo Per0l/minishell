@@ -16,11 +16,11 @@ BONUS			=	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlas
 
 BONUS_OBJS		= $(BONUS:.c=.o)
 
-NAME	= libft.a
+NAME			= libft.a
 
-CC		= gcc
+CC				= gcc
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -g
 
 .c.o:
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

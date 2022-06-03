@@ -6,11 +6,11 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/05/30 18:39:17 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:43:11 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	execve_fork(char *executable, char **args)
 {
@@ -22,13 +22,28 @@ void	execve_fork(char *executable, char **args)
 	{
 		pid = fork();
 		if (pid == 0)
-			execve(executable, args, NULL);
+			execve(executable, args, __environ);
 		else
 			waitpid(pid, NULL, 0);
 	}
 	else
 		chdir(executable);
 	free(executable);
+}
+
+int	search_builtin(char **args)
+{
+	if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
+		return (builtin_cd(args[1]));
+	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
+		return (builtin_echo_parse(args));
+	if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
+		return (builtin_pwd());
+	if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+		return (builtin_env());
+	if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
+		exit(0);
+	return (0);
 }
 
 void	parse(char *cmd, char *path)
@@ -39,11 +54,11 @@ void	parse(char *cmd, char *path)
 
 	args = ft_split(cmd, ' ');
 	if (!args)
-		return ;
+		exit(1);
 	i = 0;
 	while (args[i])
 	{
-		if (i == 0)
+		if (i == 0 && !search_builtin(args))
 		{
 			executable = search_executable(ft_split(path, ':'), args[i]);
 			if (executable)

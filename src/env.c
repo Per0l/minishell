@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <<aoteo-be@student.42.fr> >       +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/05/28 17:35:05 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:39:50 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 // podría usar también directamente __environ. ¿Lo consideraran como una
 // variable global al evaluar? porque solo se puede usar una.
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-void	builtin_env(int fd, char **envp)
+int	builtin_env(void)
 {
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (__environ[i])
 	{
-		write(fd, envp[i], ft_strlen(envp[i]));
-		write(fd, "\n", 1);
+		write(1, __environ[i], ft_strlen(__environ[i]));
+		write(1, "\n", 1);
 		i++;
 	}	
+	return (1);
 }

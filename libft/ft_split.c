@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 12:31:51 by aperol            #+#    #+#             */
-/*   Updated: 2021/07/30 16:39:08 by aperol           ###   ########.fr       */
+/*   Updated: 2022/06/03 16:37:51 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-static void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
+void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
 {
 	void	*new;
 
