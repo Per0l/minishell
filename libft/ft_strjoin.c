@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 11:40:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/03 17:34:20 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:36:55 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,18 @@ char	*ft_strljoin(char **list)
 	if (i == 1)
 		res = ft_strdup(res);
 	return (res);
+}
+
+void	ft_free_char_arr(char **arr)
+{
+	size_t	i;
+
+	i = 0;
+	while (arr && arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	if (arr)
+		free (arr);
 }

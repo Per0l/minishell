@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/03 17:19:28 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:19:39 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,29 @@ void	sigint_handler(int signum)
 	}
 }
 
+void	free_variable(void *content)
+{
+	t_variable	*var;
+
+	var = (t_variable *)content;
+	free(var->key);
+	free(var->value);
+	free(content);
+}
+
 int	main(void)
 {
 	char	*cmd;
+	t_list	*var_list;
 
+	var_list = NULL;
 	signal(SIGINT, sigint_handler);
 	while (1)
 	{
 		cmd = rl_gets();
 		if (!cmd)
 			break ;
-		parse(cmd, getenv("PATH"));
+		parse(cmd, getenv("PATH"), &var_list);
 	}
+	ft_lstclear(&var_list, &free_variable);
 }

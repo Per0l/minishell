@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/03 17:43:39 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:32:03 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*search_folder(char *folder, char *cmd)
 			dirp = readdir(dp);
 			if (dirp == NULL)
 				break ;
-			if (ft_strncmp(cmd, dirp->d_name, lenm(dirp->d_name, cmd)) == 0)
+			if (ft_strcmp(cmd, dirp->d_name) == 0)
 			{
 				res = ft_pathjoin(folder, dirp->d_name);
 				break ;
