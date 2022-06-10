@@ -3,16 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
 /*   Updated: 2022/06/03 17:39:50 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// He añadido el parámetro envp que es el tercer parámetro de main, pero se
-// podría usar también directamente __environ. ¿Lo consideraran como una
-// variable global al evaluar? porque solo se puede usar una.
 
 #include "minishell.h"
 

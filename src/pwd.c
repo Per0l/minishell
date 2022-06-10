@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 23:09:07 by aoteo-be          #+#    #+#             */
 /*   Updated: 2022/06/03 17:38:35 by aperol-h         ###   ########.fr       */

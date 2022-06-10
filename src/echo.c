@@ -3,15 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 21:37:39 by aoteo-be          #+#    #+#             */
 /*   Updated: 2022/06/08 19:31:56 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// He añadido el parámetro fd pensando en que se puede redireccionar la salida
-//  a un fichero
 
 #include "minishell.h"
 

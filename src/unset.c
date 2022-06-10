@@ -3,18 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoteo-be < aoteo-be@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/03 17:20:14 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/10 19:16:10 by aoteo-be         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// He puesto un printf solo para que tenga algo y se pueda compilar.
-
 #include "minishell.h"
 
-void	builtin_unset(void)
+void	del(void *content)
 {
-	printf("\n");
+	t_variable	*var;
+
+	var = (t_variable *)content;
+	var->key = NULL;
+	var->value = NULL;
+}
+
+void	builtin_unset(t_list *list, char *key)
+{
+	t_list		*previous;
+	t_variable	*var;
+
+	previous = NULL;
+	while (list->next != NULL)
+	{
+		var = list->content;
+		if (!ft_strncmp(var->key, key, ft_strlen(key)))
+		{
+			if (previous)
+				previous->next = list->next;
+			ft_lstdelone(list, del);
+			break ;
+		}	
+		else
+		{
+			previous = list;
+			list = list->next;
+		}	
+	}
 }
