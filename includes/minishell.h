@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-@student.42.fr>           +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/10 19:30:32 by aoteo-be         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:34:45 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,13 @@ void	builtin_exit(void);
 void	builtin_export(t_list **var_list, char *key, char *value);
 int		builtin_export_parse(t_list **var_list, char **args);
 int		builtin_pwd(void);
-void	builtin_unset(t_list *list, char *key);
+void	builtin_unset(t_list **var_list, char *key);
+int		builtin_unset_parse(t_list **var_list, char **args);
 void	parse(char *cmd, char *path, t_list **var_list);
+void	del_arg(char **args);
 char	*search_executable(char **path, char *cmd);
 size_t	lenm(char *s1, char *s2);
+void	free_variable(void *content);
+t_list	*find_key(t_list *lst, char *key);
 
 #endif

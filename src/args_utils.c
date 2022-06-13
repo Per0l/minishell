@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   args_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/30 15:41:45 by aperol            #+#    #+#             */
-/*   Updated: 2022/06/13 15:46:03 by aperol-h         ###   ########.fr       */
+/*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
+/*   Updated: 2022/06/13 16:38:30 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+
+void	del_arg(char **args)
 {
-	if (lst)
+	int	i;
+
+	if (!args || !args[0])
+		return ;
+	i = 1;
+	free(args[0]);
+	args[0] = NULL;
+	while (args[i])
 	{
-		del(lst->content);
-		free(lst);
+		args[i - 1] = args[i];
+		i++;
 	}
+	if (args[i - 1])
+		args[i - 1] = NULL;
 }

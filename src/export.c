@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/08 19:02:56 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:43:20 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,16 @@
 void	builtin_export(t_list **var_list, char *key, char *value)
 {
 	t_variable	*var;
+	t_list		*current;
 
+	current = find_key(*var_list, key);
+	if (current)
+	{
+		var = current->content;
+		free(var->value);
+		var->value = ft_strdup(value);
+		return ;
+	}
 	var = malloc(sizeof(t_variable));
 	if (var == NULL)
 		exit(1);

@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/08 19:44:31 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:40:34 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	search_builtin(char **args, t_list **var_list)
 		return (builtin_env());
 	if (ft_strcmp(args[0], "export") == 0)
 		return (builtin_export_parse(var_list, args));
+	if (ft_strcmp(args[0], "unset") == 0)
+		return (builtin_unset_parse(var_list, args));
 	if (ft_strcmp(args[0], "exit") == 0)
 		exit(0);
 	return (0);
@@ -84,7 +86,7 @@ void	expand_args(char **args, t_list **var_list)
 				args[i] = ft_strdup(var->value);
 			}
 			else
-				args[i][0] = '\0';
+				del_arg(args + i--);
 		}
 		i++;
 	}
