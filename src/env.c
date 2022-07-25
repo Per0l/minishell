@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/03 17:39:50 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 18:22:58 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_env(void)
+int	builtin_env(t_list *lst)
 {
-	int	i;
+	t_variable	*var;
 
-	i = 0;
-	while (__environ[i])
+	if (!lst)
+		return (1);
+	while (lst)
 	{
-		write(1, __environ[i], ft_strlen(__environ[i]));
-		write(1, "\n", 1);
-		i++;
-	}	
+		var = lst->content;
+		if (var && var->key && ft_strcmp(var->key, "?") != 0)
+			printf("%s=%s\n", var->key, var->value);
+		lst = lst->next;
+	}
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/13 15:44:08 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 19:13:39 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ int	main(void)
 	t_list	*var_list;
 
 	var_list = NULL;
+	init_environ(&var_list);
+	builtin_export(&var_list, "?", "0");
 	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		cmd = rl_gets();

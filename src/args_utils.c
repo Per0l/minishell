@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   args_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/13 16:38:30 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 13:59:45 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	del_arg(char **args)
 {
@@ -29,4 +28,19 @@ void	del_arg(char **args)
 	}
 	if (args[i - 1])
 		args[i - 1] = NULL;
+}
+
+char	*join_env(char *key, char *value)
+{
+	char	*res;
+	char	*tmp;
+
+	res = ft_strjoin(key, "=");
+	if (res == NULL)
+		exit(1);
+	tmp = ft_strjoin(res, value);
+	if (tmp == NULL)
+		exit(1);
+	free(res);
+	return (tmp);
 }

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/13 16:08:39 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:32:20 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	builtin_unset(t_list **var_list, char *key)
 {

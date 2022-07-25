@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
+#    By: user <user@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/06/13 16:35:42 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/07/25 13:11:53 by user             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LIBFT 		= libft.a
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -I ./libft/ -g
+CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -g #-fsanitize=address 
 
 IS_BONUS = 0
 

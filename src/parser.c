@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/13 16:40:34 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 19:12:38 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,30 @@ t_list	*find_key(t_list *lst, char *key)
 	return (NULL);
 }
 
-void	execve_fork(char *executable, char **args)
+void	execve_fork(t_list *lst, char *executable, char **args)
 {
 	pid_t		pid;
-	struct stat	sb;
+	char		**environ_str;
+	int			waitstatus;
+	char		*status_code;
 
-	stat(executable, &sb);
-	if (S_ISREG(sb.st_mode))
+	environ_str = gen_environ(lst);
+	if (environ_str == NULL)
+		exit(1);
+	pid = fork();
+	if (pid == 0)
 	{
-		pid = fork();
-		if (pid == 0)
-			execve(executable, args, __environ);
-		else
-			waitpid(pid, NULL, 0);
+		signal(SIGQUIT, SIG_DFL);
+		execve(executable, args, environ_str);
 	}
 	else
-		chdir(executable);
+	{
+		waitpid(pid, &waitstatus, 0);
+		status_code = ft_itoa(WEXITSTATUS(waitstatus));
+		builtin_export(&lst, "?", status_code);
+		free(status_code);
+	}
+	ft_free_char_arr(environ_str);
 	free(executable);
 }
 
@@ -57,7 +65,7 @@ int	search_builtin(char **args, t_list **var_list)
 	if (ft_strcmp(args[0], "pwd") == 0)
 		return (builtin_pwd());
 	if (ft_strcmp(args[0], "env") == 0)
-		return (builtin_env());
+		return (builtin_env(*var_list));
 	if (ft_strcmp(args[0], "export") == 0)
 		return (builtin_export_parse(var_list, args));
 	if (ft_strcmp(args[0], "unset") == 0)
@@ -109,8 +117,12 @@ void	parse(char *cmd, char *path, t_list **var_list)
 		{
 			executable = search_executable(ft_split(path, ':'), args[i]);
 			if (executable)
-				execve_fork(executable, args);
+				execve_fork(*var_list, executable, args);
+			else
+				builtin_export(var_list, "?", ft_itoa(errno));
 		}
+		else if (i == 0)
+			builtin_export(var_list, "?", ft_itoa(errno));
 		free(args[i]);
 		i++;
 	}

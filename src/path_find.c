@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_find.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/06/08 19:32:03 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 18:54:36 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*search_folder(char *folder, char *cmd)
 			dirp = readdir(dp);
 			if (dirp == NULL)
 				break ;
-			if (ft_strcmp(cmd, dirp->d_name) == 0)
+			if (dirp->d_type != DT_DIR && ft_strcmp(cmd, dirp->d_name) == 0)
 			{
 				res = ft_pathjoin(folder, dirp->d_name);
 				break ;
@@ -72,19 +72,18 @@ char	*search_folder(char *folder, char *cmd)
 char	*file_error_handler(char *res, char *cmd_bck, char *is_path)
 {
 	struct stat	sb;
-	int			stat_e;
 
 	if (res == NULL && !is_path)
 	{
 		ft_putstr_fd("minishell: Command not found: ", 2);
 		ft_putendl_fd(cmd_bck, 2);
+		errno = 127;
 		return (NULL);
 	}
-	stat_e = stat(res, &sb);
-	if (stat_e == -1 || (S_IEXEC & sb.st_mode) == 0)
+	stat(res, &sb);
+	if ((S_IEXEC & sb.st_mode) == 0)
 	{
-		if (stat_e != -1)
-			errno = EACCES;
+		errno = EACCES;
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putstr_fd(": ", 2);

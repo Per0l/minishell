@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/13 16:43:20 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/25 18:22:37 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,43 @@ int	builtin_export_parse(t_list **var_list, char **args)
 		builtin_export(var_list, exp_args[0], exp_args[1]);
 	ft_free_char_arr(exp_args);
 	return (1);
+}
+
+void	init_environ(t_list **var_list)
+{
+	char	**exp_args;
+	int		i;
+
+	i = 0;
+	while (__environ[i])
+	{
+		exp_args = ft_split(__environ[i], '=');
+		if (exp_args == NULL)
+			exit(1);
+		if (ft_strarrlen(exp_args) >= 2)
+			builtin_export(var_list, exp_args[0], exp_args[1]);
+		ft_free_char_arr(exp_args);
+		i++;
+	}	
+}
+
+char	**gen_environ(t_list *lst)
+{
+	t_variable	*var;
+	char		**res;
+	int			i;
+
+	if (!lst)
+		return (NULL);
+	res = (char **) malloc((ft_lstsize(lst) + 1) * sizeof(char *));
+	i = 0;
+	while (lst)
+	{
+		var = lst->content;
+		if (var && var->key && ft_strcmp(var->key, "?") != 0 && var->value)
+			res[i++] = join_env(var->key, var->value);
+		lst = lst->next;
+	}
+	res[i] = NULL;
+	return (res);
 }
