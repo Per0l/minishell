@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/07/25 18:22:37 by user             ###   ########.fr       */
+/*   Updated: 2022/07/26 18:43:34 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ void	builtin_export(t_list **var_list, char *key, char *value)
 		exit(1);
 	var->key = ft_strdup(key);
 	var->value = ft_strdup(value);
-	if (var_list == NULL)
-		*var_list = ft_lstnew(var);
-	else
-		ft_lstadd_back(var_list, ft_lstnew(var));
+	ft_lstadd_back(var_list, ft_lstnew(var));
 }
 
 int	builtin_export_parse(t_list **var_list, char **args)
@@ -91,4 +88,18 @@ char	**gen_environ(t_list *lst)
 	}
 	res[i] = NULL;
 	return (res);
+}
+
+char	*ft_getenv(t_list *lst, char *key)
+{
+	t_variable	*var;
+	t_list		*current;
+
+	current = find_key(lst, key);
+	if (current)
+	{
+		var = current->content;
+		return (var->value);
+	}
+	return (NULL);
 }

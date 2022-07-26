@@ -3,128 +3,121 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/25 19:12:38 by user             ###   ########.fr       */
+/*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
+/*   Updated: 2022/07/26 21:16:43 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*find_key(t_list *lst, char *key)
+t_command	*init_command(int cmd_len)
 {
-	t_variable	*var;
+	t_command	*command;
 
-	if (!lst)
-		return (NULL);
-	while (lst)
-	{
-		var = lst->content;
-		if (var && var->key
-			&& ft_strcmp(var->key, key) == 0)
-			return (lst);
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-void	execve_fork(t_list *lst, char *executable, char **args)
-{
-	pid_t		pid;
-	char		**environ_str;
-	int			waitstatus;
-	char		*status_code;
-
-	environ_str = gen_environ(lst);
-	if (environ_str == NULL)
+	command = malloc(sizeof(t_command));
+	if (command == NULL)
 		exit(1);
-	pid = fork();
-	if (pid == 0)
-	{
-		signal(SIGQUIT, SIG_DFL);
-		execve(executable, args, environ_str);
-	}
-	else
-	{
-		waitpid(pid, &waitstatus, 0);
-		status_code = ft_itoa(WEXITSTATUS(waitstatus));
-		builtin_export(&lst, "?", status_code);
-		free(status_code);
-	}
-	ft_free_char_arr(environ_str);
-	free(executable);
+	command->args = NULL;
+	command->i = 0;
+	command->cmd = ft_calloc(cmd_len, sizeof(char));
+	if (command->cmd == NULL)
+		exit(1);
+	command->redirect = malloc(sizeof(t_redirect));
+	if (command->redirect == NULL)
+		exit(1);
+	command->red_i = 1;
+	command->redirect[0].fd = -1;
+	command->redirect[0].mode = -1;
+	command->redirect[0].word = NULL;
+	return (command);
 }
 
-int	search_builtin(char **args, t_list **var_list)
+void	free_command(void *content)
 {
-	if (ft_strcmp(args[0], "cd") == 0)
-		return (builtin_cd(args[1]));
-	if (ft_strcmp(args[0], "echo") == 0)
-		return (builtin_echo_parse(args));
-	if (ft_strcmp(args[0], "pwd") == 0)
-		return (builtin_pwd());
-	if (ft_strcmp(args[0], "env") == 0)
-		return (builtin_env(*var_list));
-	if (ft_strcmp(args[0], "export") == 0)
-		return (builtin_export_parse(var_list, args));
-	if (ft_strcmp(args[0], "unset") == 0)
-		return (builtin_unset_parse(var_list, args));
-	if (ft_strcmp(args[0], "exit") == 0)
-		exit(0);
-	return (0);
+	t_command	*command;
+	int			i;
+
+	command = (t_command *)content;
+	i = -1;
+	while (++i < command->red_i)
+	{
+		if (command->redirect[i].word)
+			free(command->redirect[i].word);
+	}
+	free(command->redirect);
+	if (command->cmd)
+		free(command->cmd);
+	if (command->args && *(command->args))
+		ft_free_char_arr(command->args);
+	free(content);
 }
 
-void	expand_args(char **args, t_list **var_list)
+void	parse_env(char *cmd, int *i, t_list **var_list, t_command *current)
+{
+	int		j;
+	char	*key;
+	char	*value;
+
+	j = 1;
+	while (cmd && cmd[++(*i)])
+	{
+		if (cmd[*i] == '|' || cmd[*i] == ' ' || cmd[*i] == '$')
+			break ;
+		j++;
+	}
+	key = malloc(j * sizeof(char));
+	if (key == NULL)
+		exit(1);
+	ft_strlcpy(key, cmd + *i - j + 1, j);
+	value = ft_getenv(*var_list, key);
+	free(key);
+	if (value == NULL)
+		return ;
+	if ((int)ft_strlen(value) > j)
+		current->cmd = ft_realloc(current->cmd, ft_strlen(current->cmd),
+				ft_strlen(current->cmd) + ft_strlen(cmd) + j);
+	ft_strcpy(current->cmd + current->i, value);
+	current->i += ft_strlen(value);
+}
+
+t_command	*core(char *cmd, int *i, t_list **var_list, t_list **cmd_list)
+{
+	t_command	*current;
+
+	current = ft_lstlast(*cmd_list)->content;
+	if (cmd[*i] == '|')
+	{
+		ft_lstadd_back(cmd_list, ft_lstnew(init_command(ft_strlen(cmd) + 1)));
+		return (NULL);
+	}
+	while (cmd[*i] == '$')
+		parse_env(cmd, i, var_list, current);
+	return (current);
+}
+
+void	parse(t_list **var_list, char *cmd)
 {
 	int			i;
-	t_list		*found;
-	t_variable	*var;
+	t_list		*cmd_list;
+	t_command	*current;
+	t_list		*lst;
 
-	i = 0;
-	while (args && args[i])
+	cmd_list = NULL;
+	ft_lstadd_back(&cmd_list, ft_lstnew(init_command(ft_strlen(cmd) + 1)));
+	i = -1;
+	while (cmd && i < (int)ft_strlen(cmd) && cmd[++i])
 	{
-		if (ft_strlen(args[i]) > 1 && args[i][0] == '$')
-		{
-			found = find_key(*var_list, args[i] + 1);
-			if (found && found->content)
-			{
-				var = found->content;
-				free(args[i]);
-				args[i] = ft_strdup(var->value);
-			}
-			else
-				del_arg(args + i--);
-		}
-		i++;
+		current = core(cmd, &i, var_list, &cmd_list);
+		if (current && cmd[i])
+			current->cmd[current->i++] = cmd[i];
 	}
-}
-
-void	parse(char *cmd, char *path, t_list **var_list)
-{
-	char	**args;
-	char	*executable;
-	int		i;
-
-	args = ft_split(cmd, ' ');
-	if (!args)
-		exit(1);
-	i = 0;
-	expand_args(args, var_list);
-	while (args[i])
+	lst = cmd_list;
+	while (lst)
 	{
-		if (i == 0 && !search_builtin(args, var_list))
-		{
-			executable = search_executable(ft_split(path, ':'), args[i]);
-			if (executable)
-				execve_fork(*var_list, executable, args);
-			else
-				builtin_export(var_list, "?", ft_itoa(errno));
-		}
-		else if (i == 0)
-			builtin_export(var_list, "?", ft_itoa(errno));
-		free(args[i]);
-		i++;
+		execute(lst->content, var_list);
+		lst = lst->next;
 	}
-	free(args);
+	ft_lstclear(&cmd_list, &free_command);
 }

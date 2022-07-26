@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 12:31:51 by aperol            #+#    #+#             */
-/*   Updated: 2022/06/03 16:37:51 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/26 20:23:18 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
 
 	if (!ptr)
 	{
-		new = malloc(size);
+		new = ft_calloc(size, 1);
 		if (!new)
 			return (NULL);
 	}
@@ -27,7 +27,7 @@ void	*ft_realloc(void *ptr, size_t ori_size, size_t size)
 	{
 		if (ori_size < size)
 		{
-			new = malloc(size);
+			new = ft_calloc(size, 1);
 			if (!new)
 				return (NULL);
 			ft_memcpy(new, ptr, ori_size);

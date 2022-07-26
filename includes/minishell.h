@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/25 18:33:29 by user             ###   ########.fr       */
+/*   Updated: 2022/07/26 20:51:26 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,20 @@ typedef struct s_variable
 	char	*value;
 }	t_variable;
 
+typedef struct s_redirect
+{
+	int		mode;
+	int		fd;
+	char	*word;
+}	t_redirect;
+
 typedef struct s_command
 {
-	char	*cmd;
-	char	**args;
-	int		fd_stdin;
-	int		fd_stdout;
-	int		append_mode;
+	char		*cmd;
+	char		**args;
+	int			red_i;
+	int			i;
+	t_redirect	*redirect;
 }	t_command;
 
 int		builtin_cd(char *path);
@@ -54,15 +61,18 @@ void	builtin_export(t_list **var_list, char *key, char *value);
 int		builtin_export_parse(t_list **var_list, char **args);
 void	init_environ(t_list **var_list);
 char	**gen_environ(t_list *lst);
+char	*ft_getenv(t_list *lst, char *key);
 int		builtin_pwd(void);
 void	builtin_unset(t_list **var_list, char *key);
 int		builtin_unset_parse(t_list **var_list, char **args);
-void	parse(char *cmd, char *path, t_list **var_list);
+void	execute(t_command *command, t_list **var_list);
+void	parse(t_list **var_list, char *cmd);
 void	del_arg(char **args);
 char	*join_env(char *key, char *value);
 char	*search_executable(char **path, char *cmd);
 size_t	lenm(char *s1, char *s2);
 void	free_variable(void *content);
 t_list	*find_key(t_list *lst, char *key);
+void	magic(t_list **var_list, char *cmd);
 
 #endif

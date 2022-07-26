@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:54:09 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/03 17:20:00 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/26 17:46:29 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	builtin_cd(char *path)
 
 	new_dir = chdir(path);
 	if (new_dir)
-		printf("bash: cd: %s No existe el archivo o el directorio\n", path);
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+	}
 	return (1);
 }

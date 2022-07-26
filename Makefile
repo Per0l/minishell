@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: user <user@student.42.fr>                  +#+  +:+       +#+         #
+#    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/07/25 13:11:53 by user             ###   ########.fr        #
+#    Updated: 2022/07/26 21:18:30 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		=  src/main.c src/cd.c src/echo.c src/env.c src/exit.c src/export.c src/parser.c src/path_find.c src/pwd.c src/unset.c src/args_utils.c
+SRCS		=  src/main.c src/cd.c src/echo.c src/env.c src/exit.c src/export.c src/parser.c src/path_find.c src/pwd.c src/unset.c src/args_utils.c src/executer.c
 
 OBJS		= ${SRCS:.c=.o}
 

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/25 19:13:39 by user             ###   ########.fr       */
+/*   Updated: 2022/07/26 21:15:30 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_prompt(void)
+char	*get_prompt(t_list *var_list)
 {
 	char	path[MAX_BUF];
 	char	*user;
@@ -21,7 +21,7 @@ char	*get_prompt(void)
 	int		path_len;
 
 	getcwd(path, MAX_BUF);
-	user = getenv("USER");
+	user = ft_getenv(var_list, "USER");
 	user_len = ft_strlen(user);
 	path_len = ft_strlen(path);
 	prompt = (char *)malloc((user_len + path_len + 4) * sizeof(char));
@@ -35,17 +35,17 @@ char	*get_prompt(void)
 	return (prompt);
 }
 
-char	*rl_gets(void)
+char	*rl_gets(t_list *var_list)
 {
 	static char	*line_read = (char *) NULL;
 	char		*prompt;
 
 	if (line_read)
 	{
-		free (line_read);
+		free(line_read);
 		line_read = (char *) NULL;
 	}
-	prompt = get_prompt();
+	prompt = get_prompt(var_list);
 	line_read = readline(prompt);
 	free(prompt);
 	if (line_read && *line_read)
@@ -74,6 +74,7 @@ void	free_variable(void *content)
 	free(content);
 }
 
+		//parse(cmd, ft_getenv(var_list, "PATH"), &var_list);
 int	main(void)
 {
 	char	*cmd;
@@ -86,10 +87,11 @@ int	main(void)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		cmd = rl_gets();
+		cmd = rl_gets(var_list);
 		if (!cmd)
 			break ;
-		parse(cmd, getenv("PATH"), &var_list);
+		if (ft_strlen(cmd) > 0)
+			parse(&var_list, cmd);
 	}
 	ft_lstclear(&var_list, &free_variable);
 }
