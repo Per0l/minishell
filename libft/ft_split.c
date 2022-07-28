@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 12:31:51 by aperol            #+#    #+#             */
-/*   Updated: 2022/07/26 20:23:18 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/28 19:32:51 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,32 @@ char	**ft_split(char const *s, char c)
 		i++;
 	}
 	if (i > 0 && !(s[i - 1] == c))
+		arr = add_str_toarr(arr, s, i - lst_i, lst_i);
+	return (arr);
+}
+
+char	**ft_splitcmd(char const *s)
+{
+	char		**arr;
+	size_t		i;
+	size_t		lst_i;
+
+	if (!s)
+		return (NULL);
+	arr = ft_calloc(1, sizeof(char *));
+	if (arr == NULL)
+		return (NULL);
+	i = -1;
+	lst_i = 0;
+	while (s[++i])
+	{
+		if (!ft_isspace(s[i]) || ft_isquoted(s, i))
+			continue ;
+		if (i != lst_i)
+			arr = add_str_toarr(arr, s, i - lst_i, lst_i);
+		lst_i = i + 1;
+	}
+	if (i > 0 && !ft_isspace(s[i - 1]))
 		arr = add_str_toarr(arr, s, i - lst_i, lst_i);
 	return (arr);
 }

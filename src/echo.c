@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 21:37:39 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/08 19:31:56 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/27 18:23:19 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ int	builtin_echo_parse(char **args)
 		builtin_echo(1, has_n, ft_strljoin(args + 1 + has_n));
 	else
 		builtin_echo(1, has_n, NULL);
-	return (1);
+	return (0);
 }

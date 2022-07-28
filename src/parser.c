@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/26 21:16:43 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/28 20:49:01 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	parse_env(char *cmd, int *i, t_list **var_list, t_command *current)
 	j = 1;
 	while (cmd && cmd[++(*i)])
 	{
-		if (cmd[*i] == '|' || cmd[*i] == ' ' || cmd[*i] == '$')
+		if (ft_strchr("|$", cmd[*i]) || ft_isspace(cmd[*i]))
 			break ;
 		j++;
 	}
@@ -116,6 +116,7 @@ void	parse(t_list **var_list, char *cmd)
 	lst = cmd_list;
 	while (lst)
 	{
+		parse_args(lst->content);
 		execute(lst->content, var_list);
 		lst = lst->next;
 	}

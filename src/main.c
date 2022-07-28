@@ -6,11 +6,13 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/26 21:15:30 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:43:50 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_ret;
 
 char	*get_prompt(t_list *var_list)
 {
@@ -55,8 +57,9 @@ char	*rl_gets(t_list *var_list)
 
 void	sigint_handler(int signum)
 {
-	if (signum == 2)
+	if (signum == SIGINT)
 	{
+		g_ret = 130;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -81,8 +84,8 @@ int	main(void)
 	t_list	*var_list;
 
 	var_list = NULL;
+	g_ret = 0;
 	init_environ(&var_list);
-	builtin_export(&var_list, "?", "0");
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -90,7 +93,7 @@ int	main(void)
 		cmd = rl_gets(var_list);
 		if (!cmd)
 			break ;
-		if (ft_strlen(cmd) > 0)
+		if (!ft_isempty(cmd))
 			parse(&var_list, cmd);
 	}
 	ft_lstclear(&var_list, &free_variable);

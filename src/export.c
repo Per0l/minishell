@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/07/26 18:43:34 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/28 18:46:12 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,18 @@ void	builtin_export(t_list **var_list, char *key, char *value)
 
 int	builtin_export_parse(t_list **var_list, char **args)
 {
-	char	**exp_args;
-	char	*joined_args;
+	char	*equal;
+	int		idx;
 
-	joined_args = ft_strljoin(args + 1);
-	if (joined_args == NULL)
-		return (1);
-	exp_args = ft_split(joined_args, '=');
-	if (exp_args == NULL)
-		exit(1);
-	free(joined_args);
-	if (ft_strarrlen(exp_args) >= 2)
-		builtin_export(var_list, exp_args[0], exp_args[1]);
-	ft_free_char_arr(exp_args);
-	return (1);
+	if (!args || !*args || !args[1] || ft_strlen(args[1]) <= 1)
+		return (0);
+	equal = ft_strchr(args[1], '=');
+	if (equal == NULL || equal == args[1])
+		return (0);
+	idx = args[1][ft_strlen(args[1]) - 1] != '=';
+	*equal = '\0';
+	builtin_export(var_list, args[1], equal + idx);
+	return (0);
 }
 
 void	init_environ(t_list **var_list)
@@ -94,7 +92,12 @@ char	*ft_getenv(t_list *lst, char *key)
 {
 	t_variable	*var;
 	t_list		*current;
+	char		*status;
 
+	status = ft_itoa(g_ret % 255);
+	if (ft_strcmp(key, "?") == 0)
+		builtin_export(&lst, "?", status);
+	free(status);
 	current = find_key(lst, key);
 	if (current)
 	{

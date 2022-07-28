@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoteo-be <aoteo-be@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 23:09:07 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/06/03 17:38:35 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/27 18:23:24 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ int	builtin_pwd(void)
 	getcwd(working_dir, MAX_BUF);
 	printf("%s\n", working_dir);
 	free(working_dir);
-	return (1);
+	return (0);
 }

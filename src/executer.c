@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/26 21:21:00 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/28 20:48:37 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	execve_fork(t_list *lst, char *executable, t_command *command)
 {
 	pid_t		pid;
 	char		**environ_str;
-	int			waitstatus;
 
 	environ_str = gen_environ(lst);
 	if (environ_str == NULL)
@@ -42,12 +41,12 @@ void	execve_fork(t_list *lst, char *executable, t_command *command)
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		execve(executable, command->args, environ_str);
 	}
 	else
 	{
-		waitpid(pid, &waitstatus, 0);
-		errno = WEXITSTATUS(waitstatus);
+		waitpid(pid, &g_ret, 0);
 	}
 	ft_free_char_arr(environ_str);
 	free(executable);
@@ -69,26 +68,22 @@ int	search_builtin(char **args, t_list **var_list)
 		return (builtin_unset_parse(var_list, args));
 	if (ft_strcmp(args[0], "exit") == 0)
 		exit(0);
-	return (0);
+	return (-1);
 }
 
 void	execute(t_command *command, t_list **var_list)
 {
 	char	*executable;
-	char	*status_code;
+	int		built_ret;
 
-	command->args = ft_split(command->cmd, ' ');
-	if (!command->args)
-		exit(1);
-	if (!search_builtin(command->args, var_list))
+	built_ret = search_builtin(command->args, var_list);
+	if (built_ret == -1)
 	{
 		executable = search_executable(ft_split(ft_getenv(*var_list,
 						"PATH"), ':'), command->args[0]);
 		if (executable)
 			execve_fork(*var_list, executable, command);
 	}
-	status_code = ft_itoa(errno);
-	builtin_export(var_list, "?", status_code);
-	free(status_code);
-	errno = 0;
+	else
+		g_ret = built_ret;
 }
