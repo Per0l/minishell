@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 11:40:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/28 22:18:44 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/07/29 00:03:42 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,19 @@ int	ft_isquoted(const char *s, int idx)
 		return (0);
 	i = -1;
 	res = 0;
-	while (++i < idx && s[i])
+	while (++i <= idx && s[i])
 	{
-		if (s[i] == '\'' && !(res & 2))
+		if ((s[i] == '\'' && !(res & 2)) || (s[i] == '"' && !(res & 1)))
 		{
-			if (res & 1 || ft_strchr(s + i + 1, '\''))
-				res ^= 1;
-		}
-		if (s[i] == '"' && !(res & 1))
-		{
-			if (res & 2 || ft_strchr(s + i + 1, '"'))
-				res ^= 2;
+			if ((res & 1 || ft_strchr(s + i + 1, '\''))
+				|| res & 2 || ft_strchr(s + i + 1, '"'))
+				res ^= ((s[i] == '\"') + 1);
+			else if (i == idx && ft_strchr("\"'", s[idx]))
+				return (1);
 		}
 	}
-	if (ft_strchr("'\"", s[i]))
-		res = !((s[i] == '"' && !(res & 1)) || (s[i] == '\'' && !(res & 2)));
+	if ((s[idx] == '\'' && !(res & 2)) || (s[idx] == '"' && !(res & 1)))
+		res = 0;
 	return (res);
 }
 
