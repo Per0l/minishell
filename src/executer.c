@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/28 20:48:37 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/02 18:36:33 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,13 @@ void	execute(t_command *command, t_list **var_list)
 	}
 	else
 		g_ret = built_ret;
+}
+
+void	executer(t_list *cmd_list, t_list **var_list)
+{
+	while (cmd_list)
+	{
+		execute(cmd_list->content, var_list);
+		cmd_list = cmd_list->next;
+	}
 }

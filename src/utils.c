@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/28 20:47:37 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/02 19:16:13 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,27 +73,17 @@ int	ft_isempty(char *str)
 	return (1);
 }
 
-void	parse_args(t_command *command)
+int	ft_countinset(char *set, char *str)
 {
-	int		i;
-	int		j;
+	int	i;
+	int	c;
 
-	command->args = ft_splitcmd(command->cmd);
-	if (!command->args)
-		exit(1);
 	i = -1;
-	while (command->args[++i])
+	c = 0;
+	while (str && str[++i])
 	{
-		j = -1;
-		command->i = 0;
-		while (command->args[i][++j])
-		{
-			if (!ft_strchr("'\"", command->args[i][j])
-				|| ft_isquoted(command->args[i], j))
-				command->cmd[command->i++] = command->args[i][j];
-			command->cmd[command->i] = '\0';
-		}
-		free(command->args[i]);
-		command->args[i] = ft_strdup(command->cmd);
+		if (ft_strchr(set, str[i]))
+			c++;
 	}
+	return (c);
 }

@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/28 20:48:28 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/02 20:03:16 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,14 @@ typedef struct s_variable
 	char	*value;
 }	t_variable;
 
-typedef struct s_redirect
-{
-	int		mode;
-	int		fd;
-	char	*word;
-}	t_redirect;
-
 typedef struct s_command
 {
 	char		*cmd;
 	char		**args;
-	int			red_i;
 	int			i;
-	t_redirect	*redirect;
+	int			fd_out;
+	int			fd_in;
+	int			error;
 }	t_command;
 
 extern int	g_ret;
@@ -69,6 +63,7 @@ int		builtin_pwd(void);
 void	builtin_unset(t_list **var_list, char *key);
 int		builtin_unset_parse(t_list **var_list, char **args);
 void	execute(t_command *command, t_list **var_list);
+void	executer(t_list *cmd_list, t_list **var_list);
 void	parse(t_list **var_list, char *cmd);
 void	del_arg(char **args);
 char	*join_env(char *key, char *value);
@@ -79,6 +74,7 @@ t_list	*find_key(t_list *lst, char *key);
 void	magic(t_list **var_list, char *cmd);
 void	ft_strerror(char *error, char *sufix);
 int		ft_isempty(char *str);
-void	parse_args(t_command *command);
+int		parse_args(t_command *command);
+int		ft_countinset(char *set, char *str);
 
 #endif

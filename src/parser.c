@@ -6,51 +6,45 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/28 20:49:01 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/02 20:56:04 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*init_command(int cmd_len)
+t_command	*init_command(char *cmd)
 {
 	t_command	*command;
+	int			cmd_len;
 
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
 		exit(1);
 	command->args = NULL;
-	command->i = 0;
+	command->i = -1;
+	command->fd_out = 1;
+	command->fd_in = 0;
+	command->error = 0;
+	cmd_len = ft_strlen(cmd) + (ft_countinset("<>", cmd) * 2) + 1;
 	command->cmd = ft_calloc(cmd_len, sizeof(char));
 	if (command->cmd == NULL)
 		exit(1);
-	command->redirect = malloc(sizeof(t_redirect));
-	if (command->redirect == NULL)
-		exit(1);
-	command->red_i = 1;
-	command->redirect[0].fd = -1;
-	command->redirect[0].mode = -1;
-	command->redirect[0].word = NULL;
 	return (command);
 }
 
 void	free_command(void *content)
 {
 	t_command	*command;
-	int			i;
 
 	command = (t_command *)content;
-	i = -1;
-	while (++i < command->red_i)
-	{
-		if (command->redirect[i].word)
-			free(command->redirect[i].word);
-	}
-	free(command->redirect);
 	if (command->cmd)
 		free(command->cmd);
 	if (command->args && *(command->args))
 		ft_free_char_arr(command->args);
+	if (command->fd_in > 1)
+		close(command->fd_in);
+	if (command->fd_out > 1)
+		close(command->fd_out);
 	free(content);
 }
 
@@ -82,19 +76,33 @@ void	parse_env(char *cmd, int *i, t_list **var_list, t_command *current)
 	current->i += ft_strlen(value);
 }
 
-t_command	*core(char *cmd, int *i, t_list **var_list, t_list **cmd_list)
+void	split_redir(t_command *command)
 {
-	t_command	*current;
+	int		i;
+	int		j;
 
-	current = ft_lstlast(*cmd_list)->content;
-	if (cmd[*i] == '|')
+	i = -1;
+	while (command->args && command->args[++i])
 	{
-		ft_lstadd_back(cmd_list, ft_lstnew(init_command(ft_strlen(cmd) + 1)));
-		return (NULL);
+		j = -1;
+		while (command->args[i][++j])
+		{
+			if (!ft_strchr("<>", command->args[i][j])
+				|| ft_isquoted(command->args[i], j))
+				command->cmd[++command->i] = command->args[i][j];
+			else
+			{
+				if (!ft_strchr("<>\t\n\v\f\r ", command->args[i][j - 1]))
+					command->cmd[++command->i] = ' ';
+				command->cmd[++command->i] = command->args[i][j];
+				if (!ft_strchr("<>\t\n\v\f\r ", command->args[i][j + 1]))
+					command->cmd[++command->i] = ' ';
+			}
+		}
+		command->cmd[++command->i] = ' ';
 	}
-	while (cmd[*i] == '$')
-		parse_env(cmd, i, var_list, current);
-	return (current);
+	command->cmd[command->i] = '\0';
+	ft_free_char_arr(command->args);
 }
 
 void	parse(t_list **var_list, char *cmd)
@@ -102,23 +110,25 @@ void	parse(t_list **var_list, char *cmd)
 	int			i;
 	t_list		*cmd_list;
 	t_command	*current;
-	t_list		*lst;
+	char		**cmd_split;
 
 	cmd_list = NULL;
-	ft_lstadd_back(&cmd_list, ft_lstnew(init_command(ft_strlen(cmd) + 1)));
+	cmd_split = ft_splitcmd(cmd, "|");
 	i = -1;
-	while (cmd && i < (int)ft_strlen(cmd) && cmd[++i])
+	while (cmd_split && cmd_split[++i])
 	{
-		current = core(cmd, &i, var_list, &cmd_list);
-		if (current && cmd[i])
-			current->cmd[current->i++] = cmd[i];
+		current = init_command(cmd);
+		current->args = ft_splitcmd(cmd_split[i], "\t\n\v\f\r ");
+		split_redir(current);
+		if (parse_args(current))
+		{
+			free_command(current);
+			break ;
+		}
+		ft_lstadd_back(&cmd_list, ft_lstnew(current));
 	}
-	lst = cmd_list;
-	while (lst)
-	{
-		parse_args(lst->content);
-		execute(lst->content, var_list);
-		lst = lst->next;
-	}
+	if (i == (int)ft_strarrlen(cmd_split))
+		executer(cmd_list, var_list);
+	ft_free_char_arr(cmd_split);
 	ft_lstclear(&cmd_list, &free_command);
 }
