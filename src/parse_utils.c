@@ -6,20 +6,51 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:13:00 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/02 20:51:39 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/03 20:14:00 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clear_quotes(t_command *command, int i)
+void	expand_env(t_command *command, int i, int *j, t_list **var_list)
+{
+	char	*key;
+	char	*value;
+	int		si;
+
+	si = *j;
+	while (command->args[i][++*j])
+		if (ft_strchr("'\"\t\n\v\f\r <>", command->args[i][*j]))
+			break ;
+	if (si == *j - 1 && (ft_strchr("\t\n\v\f\r <>", command->args[i][*j])
+		|| ft_isquoted(command->args[i], si)))
+		command->cmd[command->i++] = '$';
+	*j -= 1;
+	if (si == *j)
+		return ;
+	key = malloc((*j - si + 1) * sizeof(char));
+	if (!key)
+		exit(1);
+	ft_strlcpy(key, command->args[i] + si + 1, *j - si + 1);
+	value = ft_getenv(*var_list, key);
+	free(key);
+	if (!value)
+		return ;
+	ft_strcpy(command->cmd + command->i, value);
+	command->i += ft_strlen(value);
+}
+
+void	interpret_arg(t_command *command, int i, t_list **var_list)
 {
 	int	j;
 
 	j = -1;
 	while (command->args[i][++j])
 	{
-		if (!ft_strchr("'\"", command->args[i][j])
+		if (command->args[i][j] == '$'
+			&& !(ft_isquoted(command->args[i], j) & 1))
+			expand_env(command, i, &j, var_list);
+		else if (!ft_strchr("'\"", command->args[i][j])
 			|| ft_isquoted(command->args[i], j))
 			command->cmd[command->i++] = command->args[i][j];
 		command->cmd[command->i] = '\0';
@@ -30,12 +61,12 @@ void	clear_quotes(t_command *command, int i)
 	command->cmd[command->i] = '\0';
 }
 
-int	parse_redir(t_command *command, int *i)
+int	parse_redir(t_command *command, int *i, t_list **var_list)
 {
 	if (!command->args[*i + 1] || (ft_strlen(command->args[*i + 1]) <= 2
 			&& ft_strchr("<>", command->args[*i + 1][0])))
 		return (1);
-	clear_quotes(command, *i + 1);
+	interpret_arg(command, *i + 1, var_list);
 	if (command->args[*i][0] == '>')
 	{
 		if (ft_strlen(command->args[*i]) == 2 && command->args[*i][1] == '>')
@@ -79,7 +110,7 @@ void	del_empty_args(t_command *command, int len)
 	command->args = res;
 }
 
-int	parse_args(t_command *command)
+int	parse_args(t_command *command, t_list **var_list)
 {
 	int		i;
 
@@ -94,11 +125,11 @@ int	parse_args(t_command *command)
 		if (ft_strlen(command->args[i]) <= 2
 			&& ft_strchr("<>", command->args[i][0]))
 		{
-			if (parse_redir(command, &i))
+			if (parse_redir(command, &i, var_list))
 				return (1);
 			continue ;
 		}
-		clear_quotes(command, i);
+		interpret_arg(command, i, var_list);
 	}
 	del_empty_args(command, i);
 	return (0);

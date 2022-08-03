@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/07/28 18:46:12 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/03 19:38:42 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ char	*ft_getenv(t_list *lst, char *key)
 	t_list		*current;
 	char		*status;
 
+	if (!lst || !key)
+		return (NULL);
 	status = ft_itoa(g_ret % 255);
 	if (ft_strcmp(key, "?") == 0)
 		builtin_export(&lst, "?", status);

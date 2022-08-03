@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/02 18:36:33 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/03 19:38:05 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_list	*find_key(t_list *lst, char *key)
 {
 	t_variable	*var;
 
-	if (!lst)
+	if (!lst || !key)
 		return (NULL);
 	while (lst)
 	{

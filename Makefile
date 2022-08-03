@@ -6,7 +6,7 @@
 #    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/08/02 19:13:59 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/08/03 20:05:33 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LIBFT 		= libft.a
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -g #-fsanitize=address 
+CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -g -fsanitize=address 
 
 IS_BONUS = 0
 

@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/02 20:03:16 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/03 19:19:12 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_list	*find_key(t_list *lst, char *key);
 void	magic(t_list **var_list, char *cmd);
 void	ft_strerror(char *error, char *sufix);
 int		ft_isempty(char *str);
-int		parse_args(t_command *command);
+int		parse_args(t_command *command, t_list **var_list);
 int		ft_countinset(char *set, char *str);
 
 #endif
