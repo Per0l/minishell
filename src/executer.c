@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/03 19:38:05 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/04 21:42:31 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,14 @@ t_list	*find_key(t_list *lst, char *key)
 
 void	execve_fork(t_list *lst, char *executable, t_command *command)
 {
-	pid_t		pid;
 	char		**environ_str;
 
 	environ_str = gen_environ(lst);
 	if (environ_str == NULL)
 		exit(1);
-	pid = fork();
-	if (pid == 0)
-	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		execve(executable, command->args, environ_str);
-	}
-	else
-	{
-		waitpid(pid, &g_ret, 0);
-	}
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	execve(executable, command->args, environ_str);
 	ft_free_char_arr(environ_str);
 	free(executable);
 }
@@ -86,13 +77,34 @@ void	execute(t_command *command, t_list **var_list)
 	}
 	else
 		g_ret = built_ret;
+	exit(g_ret);
 }
 
 void	executer(t_list *cmd_list, t_list **var_list)
 {
+	t_command	*last;
+	pid_t		pid;
+
+	last = NULL;
 	while (cmd_list)
 	{
-		execute(cmd_list->content, var_list);
+		if (cmd_list->next)
+			pipe(((t_command *)cmd_list->content)->fd_pipe);
+		pid = fork();
+		if (pid == 0)
+		{
+			set_redirs(cmd_list->content, cmd_list->next, last);
+			execute(cmd_list->content, var_list);
+		}
+		if (last)
+		{
+			close(last->fd_pipe[0]);
+			close(last->fd_pipe[1]);
+		}
+		last = cmd_list->content;
 		cmd_list = cmd_list->next;
 	}
+	waitpid(pid, &g_ret, 0);
+	while (wait(NULL) > 0)
+		continue ;
 }

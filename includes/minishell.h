@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/03 19:19:12 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/04 20:40:22 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_command
 	int			i;
 	int			fd_out;
 	int			fd_in;
+	int			fd_pipe[2];
 	int			error;
 }	t_command;
 
@@ -76,5 +77,6 @@ void	ft_strerror(char *error, char *sufix);
 int		ft_isempty(char *str);
 int		parse_args(t_command *command, t_list **var_list);
 int		ft_countinset(char *set, char *str);
+void	set_redirs(t_command *command, t_list *next, t_command *last);
 
 #endif

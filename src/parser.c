@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/03 20:08:35 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/04 21:08:55 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,34 +46,6 @@ void	free_command(void *content)
 	if (command->fd_out > 1)
 		close(command->fd_out);
 	free(content);
-}
-
-void	parse_env(char *cmd, int *i, t_list **var_list, t_command *current)
-{
-	int		j;
-	char	*key;
-	char	*value;
-
-	j = 1;
-	while (cmd && cmd[++(*i)])
-	{
-		if (ft_strchr("|$", cmd[*i]) || ft_isspace(cmd[*i]))
-			break ;
-		j++;
-	}
-	key = malloc(j * sizeof(char));
-	if (key == NULL)
-		exit(1);
-	ft_strlcpy(key, cmd + *i - j + 1, j);
-	value = ft_getenv(*var_list, key);
-	free(key);
-	if (value == NULL)
-		return ;
-	if ((int)ft_strlen(value) > j)
-		current->cmd = ft_realloc(current->cmd, ft_strlen(current->cmd),
-				ft_strlen(current->cmd) + ft_strlen(cmd) + j);
-	ft_strcpy(current->cmd + current->i, value);
-	current->i += ft_strlen(value);
 }
 
 void	split_redir(t_command *command)
@@ -131,4 +103,20 @@ void	parse(t_list **var_list, char *cmd)
 		executer(cmd_list, var_list);
 	ft_free_char_arr(cmd_split);
 	ft_lstclear(&cmd_list, &free_command);
+}
+
+void	set_redirs(t_command *command, t_list *next, t_command *last)
+{
+	if (next)
+	{
+		close(command->fd_pipe[0]);
+		dup2(command->fd_pipe[1], STDOUT_FILENO);
+		close(command->fd_pipe[1]);
+	}
+	if (last)
+	{
+		close(last->fd_pipe[1]);
+		dup2(last->fd_pipe[0], STDIN_FILENO);
+		close(last->fd_pipe[0]);
+	}
 }
