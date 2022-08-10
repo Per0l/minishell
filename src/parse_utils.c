@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:13:00 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 21:07:33 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:45:27 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	del_empty_args(t_command *command, int len)
 	int		i;
 	int		c;
 
+	if (len < 2)
+		return ;
 	i = -1;
 	c = 0;
 	while (++i < len)

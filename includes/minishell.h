@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 20:18:04 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:33:40 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int		builtin_cd(char *path);
 void	builtin_echo(int fd, int has_n, char *str);
 int		builtin_echo_parse(char **args);
 int		builtin_env(t_list *lst);
+int		max_envlen(t_list *lst);
 int		builtin_exit(char **args, int is_parent);
 void	builtin_export(t_list **var_list, char *key, char *value);
 int		builtin_export_parse(t_list **var_list, char **args);

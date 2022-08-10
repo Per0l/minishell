@@ -6,13 +6,13 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 21:07:14 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:34:56 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*init_command(char *cmd)
+t_command	*init_command(char *cmd, int margin)
 {
 	t_command	*command;
 	int			cmd_len;
@@ -25,7 +25,8 @@ t_command	*init_command(char *cmd)
 	command->fd_out = 0;
 	command->fd_in = 0;
 	command->error = 0;
-	cmd_len = ft_strlen(cmd) + (ft_countinset("<>", cmd) * 2) + 1;
+	cmd_len = ft_strlen(cmd) + (ft_countinset("<>", cmd) * 2) + 1
+		+ (ft_countinset("$", cmd) * margin);
 	command->cmd = ft_calloc(cmd_len, sizeof(char));
 	if (command->cmd == NULL)
 		exit(1);
@@ -89,7 +90,7 @@ void	parse(t_list **var_list, char *cmd)
 	i = -1;
 	while (cmd_split && cmd_split[++i])
 	{
-		current = init_command(cmd);
+		current = init_command(cmd, max_envlen(*var_list));
 		ft_lstadd_back(&cmd_list, ft_lstnew(current));
 		current->args = ft_splitcmd(cmd_split[i], "\t\n\v\f\r ");
 		split_redir(current);
