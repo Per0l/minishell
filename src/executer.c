@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 20:25:42 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 20:38:19 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,16 @@ int	search_builtin(char **args, t_list **var_list, int is_parent)
 		g_ret = (builtin_export_parse(var_list, args));
 	else if (ft_strcmp(args[0], "unset") == 0)
 		g_ret = (builtin_unset_parse(var_list, args));
-	else if (ft_strcmp(args[0], "echo") == 0)
+	else if (ft_strcmp(args[0], "exit") == 0)
+		g_ret = (builtin_exit(args, is_parent));
+	if (is_parent)
+		return (0);
+	if (ft_strcmp(args[0], "echo") == 0)
 		g_ret = (builtin_echo_parse(args));
 	else if (ft_strcmp(args[0], "pwd") == 0)
 		g_ret = (builtin_pwd());
 	else if (ft_strcmp(args[0], "env") == 0)
 		g_ret = (builtin_env(*var_list));
-	else if (ft_strcmp(args[0], "exit") == 0)
-		g_ret = (builtin_exit(args, is_parent));
 	else
 		return (0);
 	return (1);

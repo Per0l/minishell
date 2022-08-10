@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 17:14:58 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:07:14 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_command	*init_command(char *cmd)
 		exit(1);
 	command->args = NULL;
 	command->i = -1;
-	command->fd_out = 1;
+	command->fd_out = 0;
 	command->fd_in = 0;
 	command->error = 0;
 	cmd_len = ft_strlen(cmd) + (ft_countinset("<>", cmd) * 2) + 1;
@@ -115,5 +115,17 @@ void	set_redirs(t_command *command, t_list *next, t_command *last)
 		close(last->fd_pipe[1]);
 		dup2(last->fd_pipe[0], STDIN_FILENO);
 		close(last->fd_pipe[0]);
+	}
+	if (command->fd_in == -1 || command->fd_out == -1)
+		exit(1);
+	if (command->fd_out)
+	{
+		dup2(command->fd_out, STDOUT_FILENO);
+		close(command->fd_out);
+	}
+	if (command->fd_in)
+	{
+		dup2(command->fd_in, STDIN_FILENO);
+		close(command->fd_in);
 	}
 }
