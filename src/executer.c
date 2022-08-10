@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 20:38:19 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:21:10 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ int	search_builtin(char **args, t_list **var_list, int is_parent)
 		g_ret = (builtin_unset_parse(var_list, args));
 	else if (ft_strcmp(args[0], "exit") == 0)
 		g_ret = (builtin_exit(args, is_parent));
+	else if (is_parent)
+		return (-1);
 	if (is_parent)
-		return (0);
+		return (g_ret);
 	if (ft_strcmp(args[0], "echo") == 0)
 		g_ret = (builtin_echo_parse(args));
 	else if (ft_strcmp(args[0], "pwd") == 0)
@@ -74,7 +76,7 @@ pid_t	execute(t_command *command, t_list **var_list,
 	char	*executable;
 	pid_t	pid;
 
-	if (!last && !next && search_builtin(command->args, var_list, 1))
+	if (!last && !next && search_builtin(command->args, var_list, 1) != -1)
 		return (0);
 	pid = fork();
 	if (pid != 0)
