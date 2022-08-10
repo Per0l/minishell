@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/27 19:30:49 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:02:20 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,28 +74,22 @@ char	*file_error_handler(char *res, char *cmd_bck, char *is_path)
 	struct stat	sb;
 
 	if (res == NULL && !is_path)
+		ft_strerror("command not found", cmd_bck, 127);
+	else if (stat(res, &sb) == -1)
+		ft_strerror(strerror(errno), res, 126);
+	else if (S_ISDIR(sb.st_mode))
+		ft_strerror(strerror(EISDIR), res, 126);
+	else if ((S_IXUSR & sb.st_mode) == 0)
+		ft_strerror(strerror(EACCES), res, 126);
+	else
 	{
-		ft_strerror("Command not found", cmd_bck);
-		g_ret = 127;
-		return (NULL);
+		if (is_path)
+			res = ft_strdup(res);
+		return (res);
 	}
-	if (stat(res, &sb) == -1)
-	{
-		g_ret = errno;
-		ft_strerror(strerror(errno), res);
-		return (NULL);
-	}
-	else if ((S_IEXEC & sb.st_mode) == 0)
-	{
-		g_ret = EACCES;
-		ft_strerror(strerror(EACCES), res);
-		if (!is_path)
-			free(res);
-		return (NULL);
-	}
-	if (is_path)
-		res = ft_strdup(res);
-	return (res);
+	if (!is_path)
+		free(res);
+	return (NULL);
 }
 
 char	*search_executable(char **path, char *cmd)

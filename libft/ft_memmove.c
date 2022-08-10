@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperol <aperol@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 17:56:48 by aperol-h          #+#    #+#             */
-/*   Updated: 2021/07/30 22:12:21 by aperol           ###   ########.fr       */
+/*   Updated: 2022/08/10 18:03:54 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	const char	*lasts;
 	char		*lastd;
 
-	if (!dest && !src)
+	if (!dest || !src)
 		return (NULL);
 	if (dest < src)
 	{

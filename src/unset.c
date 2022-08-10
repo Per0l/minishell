@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/07/27 18:24:19 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:17:26 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	builtin_unset(t_list **var_list, char *key)
 	while (*var_list != NULL)
 	{
 		var = (*var_list)->content;
-		if (ft_strcmp(var->key, key) == 0)
+		if (var->key && ft_strcmp(var->key, key) == 0)
 		{
 			if (previous)
 				previous->next = (*var_list)->next;

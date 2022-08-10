@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/08/03 19:38:42 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:52:36 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	builtin_export(t_list **var_list, char *key, char *value)
 	if (current)
 	{
 		var = current->content;
-		free(var->value);
+		if (var->value)
+			free(var->value);
 		var->value = ft_strdup(value);
 		return ;
 	}
@@ -96,7 +97,9 @@ char	*ft_getenv(t_list *lst, char *key)
 
 	if (!lst || !key)
 		return (NULL);
-	status = ft_itoa(g_ret % 255);
+	status = ft_itoa(g_ret % 256);
+	if (!status)
+		return (NULL);
 	if (ft_strcmp(key, "?") == 0)
 		builtin_export(&lst, "?", status);
 	free(status);

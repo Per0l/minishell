@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/02 19:16:13 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:58:05 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,17 @@ char	*join_env(char *key, char *value)
 	return (tmp);
 }
 
-void	ft_strerror(char *error, char *sufix)
+int	ft_strerror(char *error, char *sufix, int ret_err)
 {
+	g_ret = ret_err;
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(error, 2);
-	if (!sufix)
+	if (sufix)
 	{
-		ft_putstr_fd("\n", 2);
-		return ;
+		ft_putstr_fd(sufix, 2);
+		ft_putstr_fd(": ", 2);
 	}
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(sufix, 2);
+	ft_putendl_fd(error, 2);
+	return (ret_err);
 }
 
 int	ft_isempty(char *str)

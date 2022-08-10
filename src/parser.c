@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/04 21:08:55 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 17:14:58 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,11 @@ void	parse(t_list **var_list, char *cmd)
 	while (cmd_split && cmd_split[++i])
 	{
 		current = init_command(cmd);
+		ft_lstadd_back(&cmd_list, ft_lstnew(current));
 		current->args = ft_splitcmd(cmd_split[i], "\t\n\v\f\r ");
 		split_redir(current);
 		if (parse_args(current, var_list))
-		{
-			free_command(current);
 			break ;
-		}
-		ft_lstadd_back(&cmd_list, ft_lstnew(current));
 	}
 	if (i == (int)ft_strarrlen(cmd_split))
 		executer(cmd_list, var_list);

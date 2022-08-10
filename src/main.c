@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/07/27 19:43:50 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:18:01 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,13 @@ void	free_variable(void *content)
 {
 	t_variable	*var;
 
+	if (!content)
+		return ;
 	var = (t_variable *)content;
-	free(var->key);
-	free(var->value);
+	if (var->key)
+		free(var->key);
+	if (var->value)
+		free(var->value);
 	free(content);
 }
 

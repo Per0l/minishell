@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:13:00 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/03 20:14:00 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:00:40 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	interpret_arg(t_command *command, int i, t_list **var_list)
 	}
 	free(command->args[i]);
 	command->args[i] = ft_strdup(command->cmd);
+	if (!command->args[i])
+		exit(1);
 	command->i = 0;
 	command->cmd[command->i] = '\0';
 }
@@ -79,7 +81,7 @@ int	parse_redir(t_command *command, int *i, t_list **var_list)
 	else if (ft_strlen(command->args[*i]) == 1)
 		command->fd_in = open(command->args[*i + 1], O_RDONLY);
 	if (command->fd_out == -1 || command->fd_in == -1)
-		command->error = errno;
+		ft_strerror(strerror(errno), command->args[*i + 1], 1);
 	command->args[*i][0] = '\0';
 	command->args[*i + 1][0] = '\0';
 	*i += 1;
@@ -126,7 +128,10 @@ int	parse_args(t_command *command, t_list **var_list)
 			&& ft_strchr("<>", command->args[i][0]))
 		{
 			if (parse_redir(command, &i, var_list))
+			{
+				ft_strerror("syntax error near unexpected token", NULL, 2);
 				return (1);
+			}
 			continue ;
 		}
 		interpret_arg(command, i, var_list);
