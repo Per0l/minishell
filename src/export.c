@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/08/10 18:52:36 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/30 21:51:02 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,91 +23,84 @@ void	builtin_export(t_list **var_list, char *key, char *value)
 		var = current->content;
 		if (var->value)
 			free(var->value);
-		var->value = ft_strdup(value);
+		var->value = value;
 		return ;
 	}
 	var = malloc(sizeof(t_variable));
 	if (var == NULL)
 		exit(1);
 	var->key = ft_strdup(key);
-	var->value = ft_strdup(value);
+	var->value = value;
 	ft_lstadd_back(var_list, ft_lstnew(var));
+}
+
+int	builint_export_validator(t_list **var_list, char *arg)
+{
+	char	*equal;
+	int		idx;
+	int		i;
+
+	i = -1;
+	while (arg[++i])
+	{	
+		if (arg[i] == '=')
+			break ;
+		if ((!ft_isalnum(arg[i]) && arg[i] != '_')
+			|| (i == 0 && ft_isdigit(arg[i])))
+			return (ft_strerror("not a valid identifier", arg, 1));
+	}
+	if (i == 0)
+		return (ft_strerror("not a valid identifier", arg, 1));
+	equal = ft_strchr(arg, '=');
+	if (!(equal == NULL || equal == arg))
+	{
+		idx = arg[ft_strlen(arg) - 1] != '=';
+		*equal = '\0';
+	}
+	if (equal)
+		builtin_export(var_list, arg, ft_strdup(equal + idx));
+	return (0);
 }
 
 int	builtin_export_parse(t_list **var_list, char **args)
 {
-	char	*equal;
-	int		idx;
+	int	i;
+	int	ret;
 
-	if (!args || !*args || !args[1] || ft_strlen(args[1]) <= 1)
-		return (0);
-	equal = ft_strchr(args[1], '=');
-	if (equal == NULL || equal == args[1])
-		return (0);
-	idx = args[1][ft_strlen(args[1]) - 1] != '=';
-	*equal = '\0';
-	builtin_export(var_list, args[1], equal + idx);
-	return (0);
-}
-
-void	init_environ(t_list **var_list)
-{
-	char	**exp_args;
-	int		i;
-
+	if (ft_strarrlen(args) <= 1)
+		return (builtin_env(*var_list, 1));
+	ret = 0;
 	i = 0;
-	while (__environ[i])
+	while (args[++i])
 	{
-		exp_args = ft_split(__environ[i], '=');
-		if (exp_args == NULL)
-			exit(1);
-		if (ft_strarrlen(exp_args) >= 2)
-			builtin_export(var_list, exp_args[0], exp_args[1]);
-		ft_free_char_arr(exp_args);
-		i++;
-	}	
+		if (builint_export_validator(var_list, args[i]))
+			ret = 1;
+	}
+	return (ret);
 }
 
-char	**gen_environ(t_list *lst)
+void	export_default(t_list **var_list)
 {
-	t_variable	*var;
-	char		**res;
-	int			i;
-
-	if (!lst)
-		return (NULL);
-	res = (char **) malloc((ft_lstsize(lst) + 1) * sizeof(char *));
-	i = 0;
-	while (lst)
-	{
-		var = lst->content;
-		if (var && var->key && ft_strcmp(var->key, "?") != 0 && var->value)
-			res[i++] = join_env(var->key, var->value);
-		lst = lst->next;
-	}
-	res[i] = NULL;
-	return (res);
+	if (!ft_getenv(*var_list, "PWD"))
+		builtin_export(var_list, "PWD", getcwd(NULL, 0));
+	if (!ft_getenv(*var_list, "PATH"))
+		builtin_export(var_list, "PATH",
+			ft_strdup("/usr/local/bin:/usr/local/sbin:\
+/usr/bin:/usr/sbin:/bin:/sbin"));
+	builtin_export(var_list, "*PWD", ft_strdup(ft_getenv(*var_list, "PWD")));
 }
 
-char	*ft_getenv(t_list *lst, char *key)
+char	*join_env(char *key, char *value)
 {
-	t_variable	*var;
-	t_list		*current;
-	char		*status;
+	char	*res;
+	char	*tmp;
 
-	if (!lst || !key)
-		return (NULL);
-	status = ft_itoa(g_ret % 256);
-	if (!status)
-		return (NULL);
-	if (ft_strcmp(key, "?") == 0)
-		builtin_export(&lst, "?", status);
-	free(status);
-	current = find_key(lst, key);
-	if (current)
-	{
-		var = current->content;
-		return (var->value);
-	}
-	return (NULL);
+	res = ft_strjoin(key, "=");
+	if (res == NULL)
+		exit(1);
+	tmp = ft_strjoin(res, value);
+	if (tmp == NULL)
+		exit(1);
+	free(res);
+	return (tmp);
 }

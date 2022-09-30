@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 21:34:56 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/27 21:47:45 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ void	parse(t_list **var_list, char *cmd)
 		if (parse_args(current, var_list))
 			break ;
 	}
-	if (i == (int)ft_strarrlen(cmd_split))
-		executer(cmd_list, var_list);
+	if (cmd_list && i == (int)ft_strarrlen(cmd_split))
+		executer(cmd_list, var_list, i);
 	ft_free_char_arr(cmd_split);
 	ft_lstclear(&cmd_list, &free_command);
 }

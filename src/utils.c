@@ -6,13 +6,13 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 19:58:05 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/30 23:06:12 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	del_arg(char **args)
+/* void	del_arg(char **args)
 {
 	int	i;
 
@@ -28,21 +28,35 @@ void	del_arg(char **args)
 	}
 	if (args[i - 1])
 		args[i - 1] = NULL;
-}
+} */
 
-char	*join_env(char *key, char *value)
+void	ft_command_subsplit(t_command *command, int i)
 {
-	char	*res;
-	char	*tmp;
+	char	**new;
+	char	**res;
+	int		j;
+	int		len;
 
-	res = ft_strjoin(key, "=");
-	if (res == NULL)
-		exit(1);
-	tmp = ft_strjoin(res, value);
-	if (tmp == NULL)
-		exit(1);
-	free(res);
-	return (tmp);
+	if (ft_countinset("\t\n\v\f\r ", command->cmd) == 0)
+		return ;
+	new = ft_splitcmd(command->cmd, "\t\n\v\f\r ");
+	ft_strcpy(command->cmd, new[0]);
+	len = (int) ft_strarrlen(command->args) + (int) ft_strarrlen(new) - 1;
+	res = (char **)malloc((len + 1) * sizeof(char *));
+	res[len] = NULL;
+	j = -1;
+	while (++j < len)
+	{
+		if (j > i && new[j - i])
+			res[j] = ft_strdup(new[j - i]);
+		else if (j > i)
+			res[j] = ft_strdup(command->args[j - i + 1]);
+		else
+			res[j] = ft_strdup(command->args[j]);
+	}
+	ft_free_char_arr(command->args);
+	ft_free_char_arr(new);
+	command->args = res;
 }
 
 int	ft_strerror(char *error, char *sufix, int ret_err)
@@ -68,6 +82,19 @@ int	ft_isempty(char *str)
 	while (str[++i])
 	{
 		if (!ft_isspace(str[i]))
+			return (0);
+	}
+	return (1);
+}
+
+int	ft_arr_isempty(char **arr)
+{
+	int	i;
+
+	i = -1;
+	while (arr && arr[++i])
+	{
+		if (!ft_isempty(arr[i]))
 			return (0);
 	}
 	return (1);

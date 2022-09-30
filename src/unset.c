@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/08/10 18:17:26 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/25 18:04:07 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ int	builtin_unset_parse(t_list **var_list, char **args)
 {
 	int	i;
 
-	if (ft_strarrlen(args) <= 1)
-		printf("unset: not enough arguments\n");
-	else
+	if (ft_strarrlen(args) > 1)
 	{
 		i = 1;
 		while (args[i])

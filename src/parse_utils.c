@@ -6,11 +6,39 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:13:00 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 21:45:27 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/30 23:11:35 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	del_cmd_arg(t_command *command, int idx)
+{
+	char	**res;
+	int		i;
+	int		c;
+	int		len;
+
+	len = (int) ft_strarrlen(command->args);
+	if (len - 1 <= 0)
+	{
+		ft_free_char_arr(command->args);
+		command->args = NULL;
+		return (0);
+	}
+	res = (char **)malloc((len) * sizeof(char *));
+	if (!res)
+		exit(1);
+	res[len - 1] = NULL;
+	i = -1;
+	c = -1;
+	while (++i < len)
+		if (i != idx)
+			res[++c] = ft_strdup(command->args[i]);
+	ft_free_char_arr(command->args);
+	command->args = res;
+	return (0);
+}
 
 void	expand_env(t_command *command, int i, int *j, t_list **var_list)
 {
@@ -20,9 +48,11 @@ void	expand_env(t_command *command, int i, int *j, t_list **var_list)
 
 	si = *j;
 	while (command->args[i][++*j])
-		if (ft_strchr("'\"\t\n\v\f\r <>", command->args[i][*j]))
+		if (!ft_isalnum(command->args[i][*j])
+			&& !ft_strchr("_?", command->args[i][*j]))
 			break ;
-	if (si == *j - 1 && (ft_strchr("\t\n\v\f\r <>", command->args[i][*j])
+	if (si == *j - 1 && (ft_strchr("\t\n\v\f\r <>0123456789abcdefghijklmnopqrs\
+				tvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ", command->args[i][*j])
 		|| ft_isquoted(command->args[i], si)))
 		command->cmd[command->i++] = '$';
 	*j -= 1;
@@ -40,10 +70,14 @@ void	expand_env(t_command *command, int i, int *j, t_list **var_list)
 	command->i += ft_strlen(value);
 }
 
-void	interpret_arg(t_command *command, int i, t_list **var_list)
+int	interpret_arg(t_command *command, int *p_i, t_list **var_list, int d)
 {
 	int	j;
+	int	i;
 
+	i = *p_i;
+	if (d == 0)
+		i++;
 	j = -1;
 	while (command->args[i][++j])
 	{
@@ -55,12 +89,14 @@ void	interpret_arg(t_command *command, int i, t_list **var_list)
 			command->cmd[command->i++] = command->args[i][j];
 		command->cmd[command->i] = '\0';
 	}
+	if (d == 1 && ft_strlen(command->cmd) == 0
+		&& ft_countinset("\"'", command->args[i]) == 0)
+		return (del_cmd_arg(command, i) & (*p_i)--);
+	if (ft_countinset("\"'", command->args[i]) < 2)
+		ft_command_subsplit(command, i);
 	free(command->args[i]);
 	command->args[i] = ft_strdup(command->cmd);
-	if (!command->args[i])
-		exit(1);
-	command->i = 0;
-	command->cmd[command->i] = '\0';
+	return (0);
 }
 
 int	parse_redir(t_command *command, int *i, t_list **var_list)
@@ -68,7 +104,7 @@ int	parse_redir(t_command *command, int *i, t_list **var_list)
 	if (!command->args[*i + 1] || (ft_strlen(command->args[*i + 1]) <= 2
 			&& ft_strchr("<>", command->args[*i + 1][0])))
 		return (1);
-	interpret_arg(command, *i + 1, var_list);
+	interpret_arg(command, i, var_list, 0);
 	if (command->args[*i][0] == '>' && command->error == 0)
 	{
 		if (ft_strlen(command->args[*i]) == 2 && command->args[*i][1] == '>')
@@ -81,39 +117,14 @@ int	parse_redir(t_command *command, int *i, t_list **var_list)
 	else if (ft_strlen(command->args[*i]) == 1 && command->error == 0)
 		command->fd_in = open(command->args[*i + 1], O_RDONLY);
 	if ((command->fd_out == -1 || command->fd_in == -1) && command->error == 0)
+	{
 		ft_strerror(strerror(errno), command->args[*i + 1], 1);
-	command->args[*i][0] = '\0';
-	command->args[*i + 1][0] = '\0';
-	*i += 1;
-	if (command->error == 0)
 		command->error = errno;
+	}
+	del_cmd_arg(command, *i);
+	del_cmd_arg(command, *i);
+	*i -= 1;
 	return (0);
-}
-
-void	del_empty_args(t_command *command, int len)
-{
-	char	**res;
-	int		i;
-	int		c;
-
-	if (len < 2)
-		return ;
-	i = -1;
-	c = 0;
-	while (++i < len)
-		if (!command->args[i][0])
-			c++;
-	res = (char **)malloc((len - c + 1) * sizeof(char *));
-	if (!res)
-		exit(1);
-	res[len - c] = NULL;
-	i = -1;
-	c = -1;
-	while (++i < len)
-		if (command->args[i][0])
-			res[++c] = ft_strdup(command->args[i]);
-	ft_free_char_arr(command->args);
-	command->args = res;
 }
 
 int	parse_args(t_command *command, t_list **var_list)
@@ -124,11 +135,11 @@ int	parse_args(t_command *command, t_list **var_list)
 	if (!command->args)
 		exit(1);
 	i = -1;
-	command->i = 0;
-	command->cmd[command->i] = '\0';
-	while (command->args[++i])
+	while (command->args && command->args[++i])
 	{
-		if (ft_strlen(command->args[i]) <= 2
+		command->i = 0;
+		command->cmd[command->i] = '\0';
+		if (ft_strlen(command->args[i]) <= 2 && command->args[i][0] != '\0'
 			&& ft_strchr("<>", command->args[i][0]))
 		{
 			if (parse_redir(command, &i, var_list))
@@ -138,8 +149,9 @@ int	parse_args(t_command *command, t_list **var_list)
 			}
 			continue ;
 		}
-		interpret_arg(command, i, var_list);
+		command->i = 0;
+		command->cmd[command->i] = '\0';
+		interpret_arg(command, &i, var_list, 1);
 	}
-	del_empty_args(command, i);
 	return (0);
 }

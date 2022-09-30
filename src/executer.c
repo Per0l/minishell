@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 21:21:10 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/30 23:08:06 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,24 @@ void	execve_fork(t_list *lst, char *executable, t_command *command)
 
 int	search_builtin(char **args, t_list **var_list, int is_parent)
 {
+	if (!args || !args[0])
+		return (1);
 	if (ft_strcmp(args[0], "cd") == 0)
-		g_ret = (builtin_cd(args[1]));
+		g_ret = (builtin_cd(*var_list, args));
 	else if (ft_strcmp(args[0], "export") == 0)
 		g_ret = (builtin_export_parse(var_list, args));
 	else if (ft_strcmp(args[0], "unset") == 0)
 		g_ret = (builtin_unset_parse(var_list, args));
 	else if (ft_strcmp(args[0], "exit") == 0)
-		g_ret = (builtin_exit(args, is_parent));
+		g_ret = (builtin_exit(args));
 	else if (is_parent)
 		return (-1);
-	if (is_parent)
-		return (g_ret);
-	if (ft_strcmp(args[0], "echo") == 0)
+	else if (ft_strcmp(args[0], "echo") == 0)
 		g_ret = (builtin_echo_parse(args));
 	else if (ft_strcmp(args[0], "pwd") == 0)
-		g_ret = (builtin_pwd());
+		g_ret = (builtin_pwd(*var_list));
 	else if (ft_strcmp(args[0], "env") == 0)
-		g_ret = (builtin_env(*var_list));
+		g_ret = (builtin_env(*var_list, 0));
 	else
 		return (0);
 	return (1);
@@ -92,7 +92,7 @@ pid_t	execute(t_command *command, t_list **var_list,
 	exit(g_ret);
 }
 
-void	executer(t_list *cmd_list, t_list **var_list)
+void	executer(t_list *cmd_list, t_list **var_list, int n)
 {
 	t_command	*last;
 	pid_t		pid;
@@ -103,6 +103,8 @@ void	executer(t_list *cmd_list, t_list **var_list)
 		if (cmd_list->next)
 			pipe(((t_command *)cmd_list->content)->fd_pipe);
 		pid = execute(cmd_list->content, var_list, last, cmd_list->next);
+		if (n == 1 && pid == 0)
+			return ;
 		if (last)
 		{
 			close(last->fd_pipe[0]);
@@ -113,8 +115,6 @@ void	executer(t_list *cmd_list, t_list **var_list)
 		last = cmd_list->content;
 		cmd_list = cmd_list->next;
 	}
-	if (!last && !cmd_list->next)
-		return ;
 	waitpid(pid, &g_ret, 0);
 	g_ret = WEXITSTATUS(g_ret);
 	while (wait(NULL) > 0)

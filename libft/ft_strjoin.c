@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 11:40:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/03 18:57:24 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/23 19:43:18 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (newstr);
 }
 
-char	*ft_strljoin(char **list)
+char	*ft_strljoin(char **list, char *separator)
 {
 	size_t	i;
 	char	*res;
@@ -47,7 +47,7 @@ char	*ft_strljoin(char **list)
 			res = list[i];
 		else
 		{
-			spaced = ft_strjoin(res, " ");
+			spaced = ft_strjoin(res, separator);
 			temp = ft_strjoin(spaced, list[i]);
 			free(spaced);
 			if (i > 1)

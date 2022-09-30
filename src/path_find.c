@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 17:43:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/08/10 19:02:20 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:10:08 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*file_error_handler(char *res, char *cmd_bck, char *is_path)
 	if (res == NULL && !is_path)
 		ft_strerror("command not found", cmd_bck, 127);
 	else if (stat(res, &sb) == -1)
-		ft_strerror(strerror(errno), res, 126);
+		ft_strerror(strerror(errno), res, 127);
 	else if (S_ISDIR(sb.st_mode))
 		ft_strerror(strerror(EISDIR), res, 126);
 	else if ((S_IXUSR & sb.st_mode) == 0)
@@ -102,6 +102,8 @@ char	*search_executable(char **path, char *cmd)
 	i = 0;
 	res = NULL;
 	is_path = ft_strchr(cmd, '/');
+	if (!path)
+		is_path = (char *)1;
 	while (path && path[i])
 	{
 		if (res == NULL && !is_path)
