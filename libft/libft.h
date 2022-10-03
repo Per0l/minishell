@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 17:22:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/30 22:14:12 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:39:03 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ unsigned long	ft_strtoul(const char *nptr, char **endptr, int base);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strljoin(char **list, char *separator);
-void			ft_free_char_arr(char **arr);
+void			ft_free_char_arr(char ***arr);
 int				ft_isquoted(const char *s, int idx);
-char			**ft_splitcmd(char const *s, char *set);
 char			*ft_strtrim(char const *s1, char const *set);
 char			**ft_split(char const *s, char c);
 void			*ft_realloc(void *ptr, size_t ori_size, size_t size);

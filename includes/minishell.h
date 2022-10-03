@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/30 23:08:01 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:57:07 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,7 @@ int		parse_args(t_command *command, t_list **var_list);
 int		ft_countinset(char *set, char *str);
 void	set_redirs(t_command *command, t_list *next, t_command *last);
 void	ft_command_subsplit(t_command *command, int i);
+char	**ft_splitcmd(char const *s, char *set);
+int		is_builtin(char *arg);
 
 #endif

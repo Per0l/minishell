@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 11:40:41 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/23 19:43:18 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:41:11 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,23 @@ char	*ft_strljoin(char **list, char *separator)
 	return (res);
 }
 
-void	ft_free_char_arr(char **arr)
+void	ft_free_char_arr(char ***arr)
 {
 	size_t	i;
+	char	**p;
 
+	p = *arr;
 	i = 0;
-	while (arr && arr[i])
+	while (p && p[i])
 	{
-		free(arr[i]);
+		free(p[i]);
 		i++;
 	}
-	if (arr)
-		free (arr);
+	if (p)
+	{
+		free (p);
+		*arr = NULL;
+	}
 }
 
 int	ft_isquoted(const char *s, int idx)

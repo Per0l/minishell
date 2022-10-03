@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 17:46:16 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/27 21:47:45 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:03:41 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	free_command(void *content)
 	command = (t_command *)content;
 	if (command->cmd)
 		free(command->cmd);
-	if (command->args && *(command->args))
-		ft_free_char_arr(command->args);
+	if (command->args)
+		ft_free_char_arr(&command->args);
 	if (command->fd_in > 1)
 		close(command->fd_in);
 	if (command->fd_out > 1)
@@ -75,7 +75,7 @@ void	split_redir(t_command *command)
 		command->cmd[++command->i] = ' ';
 	}
 	command->cmd[command->i] = '\0';
-	ft_free_char_arr(command->args);
+	ft_free_char_arr(&command->args);
 }
 
 void	parse(t_list **var_list, char *cmd)
@@ -93,13 +93,17 @@ void	parse(t_list **var_list, char *cmd)
 		current = init_command(cmd, max_envlen(*var_list));
 		ft_lstadd_back(&cmd_list, ft_lstnew(current));
 		current->args = ft_splitcmd(cmd_split[i], "\t\n\v\f\r ");
+		if (ft_isempty(cmd_split[i]) || ft_strarrlen(current->args) <= 0)
+			break ;
 		split_redir(current);
 		if (parse_args(current, var_list))
 			break ;
 	}
 	if (cmd_list && i == (int)ft_strarrlen(cmd_split))
 		executer(cmd_list, var_list, i);
-	ft_free_char_arr(cmd_split);
+	else
+		ft_strerror("syntax error near unexpected token", NULL, 2);
+	ft_free_char_arr(&cmd_split);
 	ft_lstclear(&cmd_list, &free_command);
 }
 

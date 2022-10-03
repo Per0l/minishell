@@ -6,11 +6,13 @@
 #    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/08/03 20:05:33 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/10/03 18:27:58 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		=  src/main.c src/cd.c src/echo.c src/env.c src/exit.c src/export.c src/parser.c src/parse_utils.c src/path_find.c src/pwd.c src/unset.c src/utils.c src/executer.c
+SRCS		=  src/main.c src/cd.c src/echo.c src/env.c src/exit.c src/export.c src/parser.c\
+src/parse_utils.c src/path_find.c src/pwd.c src/unset.c src/utils.c src/executer.c\
+src/split.c
 
 OBJS		= ${SRCS:.c=.o}
 

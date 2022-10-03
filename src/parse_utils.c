@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:13:00 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/30 23:11:35 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:12:45 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	del_cmd_arg(t_command *command, int idx)
 	len = (int) ft_strarrlen(command->args);
 	if (len - 1 <= 0)
 	{
-		ft_free_char_arr(command->args);
+		ft_free_char_arr(&command->args);
 		command->args = NULL;
 		return (0);
 	}
@@ -35,7 +35,7 @@ int	del_cmd_arg(t_command *command, int idx)
 	while (++i < len)
 		if (i != idx)
 			res[++c] = ft_strdup(command->args[i]);
-	ft_free_char_arr(command->args);
+	ft_free_char_arr(&command->args);
 	command->args = res;
 	return (0);
 }
@@ -139,14 +139,12 @@ int	parse_args(t_command *command, t_list **var_list)
 	{
 		command->i = 0;
 		command->cmd[command->i] = '\0';
-		if (ft_strlen(command->args[i]) <= 2 && command->args[i][0] != '\0'
+		if (command->args[i][0] != '\0'
 			&& ft_strchr("<>", command->args[i][0]))
 		{
-			if (parse_redir(command, &i, var_list))
-			{
-				ft_strerror("syntax error near unexpected token", NULL, 2);
+			if (ft_strlen(command->args[i]) > 2
+				|| parse_redir(command, &i, var_list))
 				return (1);
-			}
 			continue ;
 		}
 		command->i = 0;

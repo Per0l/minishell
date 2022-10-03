@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:54:09 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/09/30 22:41:31 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:42:36 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	builtin_cd(t_list *lst, char **args)
 {
 	int		new_dir;
 	char	*path;
+	char	*tmp;
 
 	if (ft_strarrlen(args) > 2)
 		return (ft_strerror("too many arguments", "cd", 1));
@@ -49,10 +50,9 @@ int	builtin_cd(t_list *lst, char **args)
 	new_dir = chdir(path);
 	if (new_dir)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
+		tmp = ft_strjoin("cd: ", path);
+		ft_strerror(strerror(errno), tmp, 1);
+		free(tmp);
 		return (1);
 	}
 	else

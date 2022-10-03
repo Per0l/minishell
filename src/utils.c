@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/30 23:06:12 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:39:33 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,30 @@ void	ft_command_subsplit(t_command *command, int i)
 		else
 			res[j] = ft_strdup(command->args[j]);
 	}
-	ft_free_char_arr(command->args);
-	ft_free_char_arr(new);
+	ft_free_char_arr(&command->args);
+	ft_free_char_arr(&new);
 	command->args = res;
 }
 
 int	ft_strerror(char *error, char *sufix, int ret_err)
 {
+	char	**list;
+	char	*tmp;
+	int		i;
+
+	list = malloc(4 * sizeof(char *));
+	i = -1;
 	g_ret = ret_err;
-	ft_putstr_fd("minishell: ", 2);
+	list[++i] = ft_strdup("minishell");
 	if (sufix)
-	{
-		ft_putstr_fd(sufix, 2);
-		ft_putstr_fd(": ", 2);
-	}
-	ft_putendl_fd(error, 2);
+		list[++i] = sufix;
+	list[++i] = error;
+	list[++i] = NULL;
+	tmp = ft_strljoin(list, ": ");
+	ft_putendl_fd(tmp, 2);
+	free(tmp);
+	free(list[0]);
+	free(list);
 	return (ret_err);
 }
 

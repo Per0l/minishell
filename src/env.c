@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/09/30 21:43:09 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:38:52 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	init_environ(t_list **var_list)
 			tmp[0] = '\0';
 			builtin_export(var_list, exp_args[0], tmp);
 		}
-		ft_free_char_arr(exp_args);
+		ft_free_char_arr(&exp_args);
 		i++;
 	}
 	export_default(var_list);

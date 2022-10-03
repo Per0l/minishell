@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:10:46 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/09/30 23:08:06 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:59:53 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	execve_fork(t_list *lst, char *executable, t_command *command)
 	signal(SIGINT, SIG_DFL);
 	execve(executable, command->args, environ_str);
 	ft_strerror(strerror(errno), "execve", 1);
-	ft_free_char_arr(environ_str);
+	ft_free_char_arr(&environ_str);
 	free(executable);
 	exit(1);
 }
@@ -78,14 +78,20 @@ pid_t	execute(t_command *command, t_list **var_list,
 
 	if (!last && !next && search_builtin(command->args, var_list, 1) != -1)
 		return (0);
+	executable = NULL;
+	if (!is_builtin(command->args[0]))
+		executable = search_executable(ft_split(ft_getenv(*var_list,
+						"PATH"), ':'), command->args[0]);
 	pid = fork();
 	if (pid != 0)
+	{
+		if (executable)
+			free(executable);
 		return (pid);
+	}
 	set_redirs(command, next, last);
 	if (!search_builtin(command->args, var_list, 0))
 	{
-		executable = search_executable(ft_split(ft_getenv(*var_list,
-						"PATH"), ':'), command->args[0]);
 		if (executable)
 			execve_fork(*var_list, executable, command);
 	}
