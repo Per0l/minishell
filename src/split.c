@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:27:12 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/10/03 19:57:13 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/03 20:22:39 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ char	**ft_splitcmd(char const *s, char *set)
 	{
 		if (!ft_strchr(set, s[i]) || ft_isquoted(s, i))
 			continue ;
-		arr = add_str_toarr(arr, s, i - lst_i, lst_i);
+		if (i != lst_i)
+			arr = add_str_toarr(arr, s, i - lst_i, lst_i);
 		lst_i = i + 1;
 	}
 	if (arr && i > 0 && !ft_strchr(set, s[i - 1]))
 		arr = add_str_toarr(arr, s, i - lst_i, lst_i);
-	else if (arr && ft_strchr("|", s[i - 1]))
+	if (arr && (ft_strchr("|", s[i - 1]) || ft_strchr("|", s[0])))
 		ft_free_char_arr(&arr);
 	return (arr);
 }
