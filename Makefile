@@ -6,7 +6,7 @@
 #    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/10/05 19:43:36 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/10/05 19:46:13 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFT 		= libft.a
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -I ~/.brew/opt/readline/include -g -fsanitize=address 
+CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -I ~/.brew/opt/readline/include
 
 IS_BONUS = 0
 
