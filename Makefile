@@ -6,7 +6,7 @@
 #    By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/27 16:38:27 by aperol-h          #+#    #+#              #
-#    Updated: 2022/10/03 18:27:58 by aperol-h         ###   ########.fr        #
+#    Updated: 2022/10/05 18:58:31 by aperol-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFT 		= libft.a
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -g -fsanitize=address 
+CFLAGS		= -Wall -Wextra -Werror -I ./libft/ -I ~/.brew/opt/readline/include -g -fsanitize=address 
 
 IS_BONUS = 0
 
@@ -35,7 +35,7 @@ all:		${NAME}
 ${NAME}:	${OBJS}
 			make -C libft/
 			make bonus -C libft/
-			${CC} ${CFLAGS} ${OBJS} -L libft -lft -lreadline -o ${NAME}
+			${CC} ${CFLAGS} ${OBJS} -L libft -lft -lreadline -L ~/.brew/opt/readline/lib -o ${NAME}
 
 clean:
 			make clean -C libft/

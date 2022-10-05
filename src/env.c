@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/10/03 18:38:52 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:46:20 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ int	builtin_env(t_list *lst, int is_export)
 		var = lst->content;
 		if (var && var->key && !ft_strchr("?*", var->key[0]))
 		{
-			if (!is_export)
+			if (!is_export && var->value)
 				printf("%s=%s\n", var->key, var->value);
-			else
+			else if (is_export && var->value)
 				printf("declare -x %s=\"%s\"\n", var->key, var->value);
+			else if (is_export && !var->value)
+				printf("declare -x %s\n", var->key);
 		}
 		lst = lst->next;
 	}
@@ -55,28 +57,17 @@ int	max_envlen(t_list *lst)
 	return ((int)res);
 }
 
-void	init_environ(t_list **var_list)
+void	init_environ(t_list **var_list, char *envp[])
 {
-	char	**exp_args;
-	char	*tmp;
+	char	*equal;
 	int		i;
 
 	i = 0;
-	while (__environ[i])
+	while (envp[i])
 	{
-		exp_args = ft_split(__environ[i], '=');
-		if (exp_args == NULL)
-			exit(1);
-		if (ft_strarrlen(exp_args) >= 2)
-			builtin_export(var_list, exp_args[0],
-				ft_strljoin(exp_args + 1, "="));
-		else
-		{
-			tmp = malloc(1 * sizeof(char));
-			tmp[0] = '\0';
-			builtin_export(var_list, exp_args[0], tmp);
-		}
-		ft_free_char_arr(&exp_args);
+		equal = ft_strchr(envp[i], '=');
+		*equal = '\0';
+		builtin_export(var_list, envp[i], ft_strdup(equal + 1));
 		i++;
 	}
 	export_default(var_list);

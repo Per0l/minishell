@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/10/03 20:07:37 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:53:07 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,26 +107,52 @@ int main(int argc, char **argv)
 	}
 	else */
 
-int	main(void)
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	*cmd;
 	t_list	*var_list;
+	char	**arg_input;
+	int		i;
 
+	(void) argv;
+	(void) argc;
 	var_list = NULL;
 	g_ret = 0;
-	init_environ(&var_list);
+	init_environ(&var_list, envp);
 	signal(SIGQUIT, SIG_IGN);
-	while (1)
+	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
 	{
-		signal(SIGINT, sigint_handler);
-		cmd = rl_gets(var_list);
-		if (!cmd)
-			break ;
-		if (!ft_isempty(cmd))
+		arg_input = ft_split(argv[2], ';');
+		if (!arg_input)
+			exit(1);
+		i = 0;
+		while (arg_input[i])
 		{
-			signal(SIGINT, SIG_IGN);
-			parse(&var_list, cmd);
+			if (!ft_isempty(arg_input[i]))
+			{
+				signal(SIGINT, SIG_IGN);
+				parse(&var_list, arg_input[i]);
+			}
+			i++;
+		}
+		ft_free_char_arr(&arg_input);
+		exit(g_ret);
+	}
+	else
+	{
+		while (1)
+		{
+			signal(SIGINT, sigint_handler);
+			cmd = rl_gets(var_list);
+			if (!cmd)
+				break ;
+			if (!ft_isempty(cmd))
+			{
+				signal(SIGINT, SIG_IGN);
+				parse(&var_list, cmd);
+			}
 		}
 	}
 	ft_lstclear(&var_list, &free_variable);
+	exit(g_ret);
 }

@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:10:52 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/09/30 21:51:02 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:47:16 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	builtin_export(t_list **var_list, char *key, char *value)
 	current = find_key(*var_list, key);
 	if (current)
 	{
+		if (!value)
+			return ;
 		var = current->content;
 		if (var->value)
 			free(var->value);
@@ -52,13 +54,13 @@ int	builint_export_validator(t_list **var_list, char *arg)
 	if (i == 0)
 		return (ft_strerror("not a valid identifier", arg, 1));
 	equal = ft_strchr(arg, '=');
+	idx = 0;
 	if (!(equal == NULL || equal == arg))
 	{
-		idx = arg[ft_strlen(arg) - 1] != '=';
+		idx = 1;
 		*equal = '\0';
 	}
-	if (equal)
-		builtin_export(var_list, arg, ft_strdup(equal + idx));
+	builtin_export(var_list, arg, ft_strdup(equal + idx));
 	return (0);
 }
 
@@ -88,6 +90,7 @@ void	export_default(t_list **var_list)
 			ft_strdup("/usr/local/bin:/usr/local/sbin:\
 /usr/bin:/usr/sbin:/bin:/sbin"));
 	builtin_export(var_list, "*PWD", ft_strdup(ft_getenv(*var_list, "PWD")));
+	builtin_export(var_list, "OLDPWD", NULL);
 }
 
 char	*join_env(char *key, char *value)

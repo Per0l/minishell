@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 19:11:28 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/10/03 19:57:07 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 16:42:31 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/wait.h>
 # include <sys/ioctl.h>
 # include <limits.h>
+# include <string.h>
 # include "libft.h"
 
 # ifndef MAX_BUF
@@ -60,7 +61,7 @@ int		builtin_exit(char **args);
 void	builtin_export(t_list **var_list, char *key, char *value);
 int		builtin_export_parse(t_list **var_list, char **args);
 void	export_default(t_list **var_list);
-void	init_environ(t_list **var_list);
+void	init_environ(t_list **var_list, char *envp[]);
 char	**gen_environ(t_list *lst);
 char	*ft_getenv(t_list *lst, char *key);
 int		builtin_pwd(t_list *lst);

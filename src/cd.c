@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:54:09 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/10/03 19:42:36 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:50:58 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int	builtin_cd(t_list *lst, char **args)
 	char	*path;
 	char	*tmp;
 
-	if (ft_strarrlen(args) > 2)
-		return (ft_strerror("too many arguments", "cd", 1));
 	path = args[1];
 	if (!path)
 		path = ft_getenv(lst, "HOME");

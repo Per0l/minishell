@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:59:21 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/09/30 23:07:54 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:00:47 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	builtin_exit(char **args)
 	if (!ft_is_numeric(str))
 	{
 		free(str);
-		exit(ft_strerror("numeric argument required", args[1], 2));
+		exit(ft_strerror("numeric argument required", args[1], 255));
 	}
 	free(str);
 	if (argv != 2)
