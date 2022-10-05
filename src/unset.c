@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:06:48 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/10/05 17:54:41 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:21:23 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	builint_unset_validator(t_list **var_list, char *arg)
 	builtin_unset(var_list, arg);
 	return (0);
 }
-
 
 void	builtin_unset(t_list **var_list, char *key)
 {

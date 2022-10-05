@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:54:09 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/10/05 18:50:58 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:17:20 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	update_pwd(t_list *lst, char *path)
 		ft_strerror(strerror(errno), "getcwd", 1);
 		pwd = ft_getenv(lst, "*PWD");
 		tmp = malloc((ft_strlen(pwd) + 2) * sizeof(char));
+		if (!tmp)
+			exit(1);
 		ft_strcpy(tmp, pwd);
 		tmp[ft_strlen(pwd)] = '/';
 		tmp[ft_strlen(pwd) + 1] = '\0';

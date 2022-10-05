@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 16:32:06 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/10/03 19:39:33 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:40:16 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,25 @@ void	ft_command_subsplit(t_command *command, int i)
 {
 	char	**new;
 	char	**res;
-	int		j;
-	int		len;
+	int		p[2];
 
 	if (ft_countinset("\t\n\v\f\r ", command->cmd) == 0)
 		return ;
 	new = ft_splitcmd(command->cmd, "\t\n\v\f\r ");
 	ft_strcpy(command->cmd, new[0]);
-	len = (int) ft_strarrlen(command->args) + (int) ft_strarrlen(new) - 1;
-	res = (char **)malloc((len + 1) * sizeof(char *));
-	res[len] = NULL;
-	j = -1;
-	while (++j < len)
+	p[1] = (int) ft_strarrlen(command->args) + (int) ft_strarrlen(new) - 1;
+	res = (char **)ft_calloc(sizeof(char *), (p[1] + 1));
+	if (!res)
+		exit(1);
+	p[0] = -1;
+	while (res && ++p[0] < p[1])
 	{
-		if (j > i && new[j - i])
-			res[j] = ft_strdup(new[j - i]);
-		else if (j > i)
-			res[j] = ft_strdup(command->args[j - i + 1]);
+		if (p[0] > i && new[p[0] - i])
+			res[p[0]] = ft_strdup(new[p[0] - i]);
+		else if (p[0] > i)
+			res[p[0]] = ft_strdup(command->args[p[0] - i + 1]);
 		else
-			res[j] = ft_strdup(command->args[j]);
+			res[p[0]] = ft_strdup(command->args[p[0]]);
 	}
 	ft_free_char_arr(&command->args);
 	ft_free_char_arr(&new);
@@ -66,6 +66,8 @@ int	ft_strerror(char *error, char *sufix, int ret_err)
 	int		i;
 
 	list = malloc(4 * sizeof(char *));
+	if (!list)
+		exit(1);
 	i = -1;
 	g_ret = ret_err;
 	list[++i] = ft_strdup("minishell");

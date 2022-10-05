@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 13:58:39 by aperol-h          #+#    #+#             */
-/*   Updated: 2022/10/05 18:53:07 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:20:43 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,35 +84,10 @@ void	free_variable(void *content)
 	free(content);
 }
 
-/* 
-int main(int argc, char **argv)
-	char	**arg_input;
-	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
-	{
-		arg_input = ft_split(argv[2], ';');
-		if (!arg_input)
-			exit(1);
-		i = 0;
-		while (arg_input[i])
-		{
-			if (!ft_isempty(arg_input[i]))
-			{
-				signal(SIGINT, SIG_IGN);
-				parse(&var_list, arg_input[i]);
-			}
-			i++;
-		}
-		ft_free_char_arr(&arg_input);
-		exit(g_ret);
-	}
-	else */
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*cmd;
 	t_list	*var_list;
-	char	**arg_input;
-	int		i;
 
 	(void) argv;
 	(void) argc;
@@ -120,37 +95,16 @@ int	main(int argc, char *argv[], char *envp[])
 	g_ret = 0;
 	init_environ(&var_list, envp);
 	signal(SIGQUIT, SIG_IGN);
-	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
+	while (1)
 	{
-		arg_input = ft_split(argv[2], ';');
-		if (!arg_input)
-			exit(1);
-		i = 0;
-		while (arg_input[i])
+		signal(SIGINT, sigint_handler);
+		cmd = rl_gets(var_list);
+		if (!cmd)
+			break ;
+		if (!ft_isempty(cmd))
 		{
-			if (!ft_isempty(arg_input[i]))
-			{
-				signal(SIGINT, SIG_IGN);
-				parse(&var_list, arg_input[i]);
-			}
-			i++;
-		}
-		ft_free_char_arr(&arg_input);
-		exit(g_ret);
-	}
-	else
-	{
-		while (1)
-		{
-			signal(SIGINT, sigint_handler);
-			cmd = rl_gets(var_list);
-			if (!cmd)
-				break ;
-			if (!ft_isempty(cmd))
-			{
-				signal(SIGINT, SIG_IGN);
-				parse(&var_list, cmd);
-			}
+			signal(SIGINT, SIG_IGN);
+			parse(&var_list, cmd);
 		}
 	}
 	ft_lstclear(&var_list, &free_variable);

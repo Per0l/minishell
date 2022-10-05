@@ -6,7 +6,7 @@
 /*   By: aperol-h <aperol-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:57:37 by aoteo-be          #+#    #+#             */
-/*   Updated: 2022/10/05 18:46:20 by aperol-h         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:19:17 by aperol-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,14 @@ char	**gen_environ(t_list *lst)
 	if (!lst)
 	{
 		res = (char **) malloc(sizeof(char *));
+		if (!res)
+			exit(1);
 		res[0] = NULL;
 		return (res);
 	}
 	res = (char **) malloc((ft_lstsize(lst) + 1) * sizeof(char *));
+	if (!res)
+		exit(1);
 	i = 0;
 	while (lst)
 	{
